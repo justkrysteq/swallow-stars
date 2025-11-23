@@ -4,8 +4,8 @@
 #define MOVE_DOWN 's'
 #define MOVE_LEFT 'a'
 #define MOVE_RIGHT 'd'
-#define CHANGE_SPEED_UP 'p'
-#define CHANGE_SPEED_DOWN 'o'
+#define INCREASE_SPEED 'p'
+#define DECREASE_SPEED 'o'
 
 #define UP_DIRECTION -1
 #define DOWN_DIRECTION 1

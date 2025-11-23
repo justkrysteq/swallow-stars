@@ -20,8 +20,17 @@ void handle_bird_input(WIN *game_window, char key, BIRD *bird) {
 		bird->dir_x = RIGHT_DIRECTION;
 		bird->dir_y = 0;
 		bird->sprite = PLAYER_SPRITE_RIGHT;
+	} else if (key == INCREASE_SPEED) {
+		bird->speed++;
+		if (bird->speed > Player_Max_Speed) {
+			bird->speed = Player_Max_Speed;
+		}
+	} else if (key == DECREASE_SPEED) {
+		bird->speed--;
+		if (bird->speed < Player_Min_Speed) {
+			bird->speed = Player_Min_Speed;
+		}
 	}
-
 };
 
 void run_game() {
