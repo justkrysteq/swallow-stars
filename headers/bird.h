@@ -1,5 +1,6 @@
 #include "window.h"
 #include "consts.h"
+#include "config.h"
 
 /**
  * **ncurses bird struct with attributes for later use**
@@ -14,7 +15,8 @@
  */
 typedef struct {
 	WIN *parent_window;
-	int y, x;
+	float y, x;
+	int dir_y, dir_x;
 	int speed; // speed of movement 1-5
 	char sprite;
 	int life_force;
@@ -33,9 +35,19 @@ typedef struct {
 BIRD *init_bird(WIN *parent_window, int y, int x);
 
 /**
- * **draws a bird**
+ * **Draws a bird**
  *
  * *Parameters:*
  * - **bird**: *pointer to a bird*
  */
 void draw_bird(BIRD *bird);
+
+/**
+ * **Moves a bird**
+ *
+ * Moves the bird in the direction specified by the bird's dir_x and dir_y
+ *
+ * *Parameters:*
+ * - **bird**: *pointer to a bird*
+ */
+void move_bird(BIRD *bird);

@@ -1,24 +1,64 @@
 #include "headers/main.h"
 
-int main(int argc, char *argv[]) {
+void handle_bird_input(WIN *game_window, char key, BIRD *bird) {
+	if (key == MOVE_UP) {
+		bird->dir_y = UP_DIRECTION;
+		bird->dir_x = 0;
+		bird->sprite = '^';
+	}
+	else if (key == MOVE_DOWN) {
+		bird->dir_y = DOWN_DIRECTION;
+		bird->dir_x = 0;
+		bird->sprite = 'v';
+	}
+	else if (key == MOVE_LEFT) {
+		bird->dir_x = LEFT_DIRECTION;
+		bird->dir_y = 0;
+		bird->sprite = '<';
+	}
+	else if (key == MOVE_RIGHT) {
+		bird->dir_x = RIGHT_DIRECTION;
+		bird->dir_y = 0;
+		bird->sprite = '>';
+	}
+
+};
+
+void run_game() {
 	WINDOW *screen = start_game();
 
-	// TODO: Tu jest potrzebne wczytanie z plików height i width
-	WIN *game_window = init_window(screen, 10, 40, 0, 0, true, false);
-	WIN *status_window = init_window(screen, 3, 40, game_window->height, 0, true, true);
-	BIRD *bird = init_bird(game_window, 5, 5);
-	draw_bird(bird);
+	WIN *game_window = init_window(screen, Game_Height, Game_Width, 0, 0, true, false);
+	WIN *status_window = init_window(screen, 7, Game_Width, game_window->height, 0, true, true);
+	BIRD *bird = init_bird(game_window, game_window->height - 2, game_window->width / 2);
 
 	char key;
+	int iteration = 0;
 
 	while (true) {
-		key = getch(); // don't know if it freezes the game atm
-
-		if (key == QUIT) {
+		key = wgetch(game_window->window);
+		
+		if (key == QUIT || Time_Limit == 0) {
 			break;
 		}
 
+		handle_bird_input(game_window, key, bird);
 
+		update_status(status_window);
+
+		// TODO: implement updating whole game window, atm this is here:
+		move_bird(bird);
+		clear_window(game_window);
+		draw_bird(bird);
+
+		if (iteration % 10 == 0) {
+			Time_Limit--;
+		}
+
+		iteration++;
+
+		flushinp(); // avoids key press accumulation
+
+    	usleep(FRAME_TIME * 1000); // receives value in microseconds
 	}
 
 	delwin(game_window->window);
@@ -30,6 +70,11 @@ int main(int argc, char *argv[]) {
 	free(game_window);
 	free(status_window);
 	free(bird);
+}
+
+int main(int argc, char *argv[]) {
+	get_config("game.conf");
+	run_game();
 
 	return EXIT_SUCCESS;
 }

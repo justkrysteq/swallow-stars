@@ -1,5 +1,8 @@
 #include <curses.h>
 #include <stdlib.h>
+#include <string.h>
+
+#include "config.h"
 
 /**
  * **ncurses window struct with attributes for later use**
@@ -15,6 +18,7 @@ typedef struct {
 	WINDOW *window;
 	int height, width;
 	int start_y, start_x;
+	bool has_border;
 	// int color;
 } WIN;
 
@@ -40,3 +44,19 @@ WINDOW *start_game();
  * *Returns:* pointer to a window
  */
 WIN *init_window(WINDOW *parent_window, int height, int width, int start_y, int start_x, bool has_border, bool wait_for_input);
+
+/**
+ * **Clears a window**
+ *
+ * *Parameters:*
+ * - **window**: *pointer to a window*
+ */
+void clear_window(WIN *window);
+
+/**
+ * **Updates status window**
+ *
+ * *Parameters:*
+ * - **status_window**: *pointer to status window*
+ */
+void update_status(WIN *status_window);

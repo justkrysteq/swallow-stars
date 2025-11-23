@@ -7,9 +7,9 @@
 #define CHANGE_SPEED_UP 'p'
 #define CHANGE_SPEED_DOWN 'o'
 
-// ---- BIRD CONSTANTS ----
-#define BIRD_INITIAL_SPEED 1
-#define BIRD_MAX_SPEED 5
-#define BIRD_MIN_SPEED 1
-#define BIRD_SPRITE '^'
-#define BIRD_INITIAL_LIFE_FORCE 8
+#define UP_DIRECTION -1
+#define DOWN_DIRECTION 1
+#define LEFT_DIRECTION -1
+#define RIGHT_DIRECTION 1
+
+#define FRAME_TIME 100 // Milliseconds Per Frame
