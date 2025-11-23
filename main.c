@@ -4,22 +4,22 @@ void handle_bird_input(WIN *game_window, char key, BIRD *bird) {
 	if (key == MOVE_UP) {
 		bird->dir_y = UP_DIRECTION;
 		bird->dir_x = 0;
-		bird->sprite = '^';
+		bird->sprite = PLAYER_SPRITE_UP;
 	}
 	else if (key == MOVE_DOWN) {
 		bird->dir_y = DOWN_DIRECTION;
 		bird->dir_x = 0;
-		bird->sprite = 'v';
+		bird->sprite = PLAYER_SPRITE_DOWN;
 	}
 	else if (key == MOVE_LEFT) {
 		bird->dir_x = LEFT_DIRECTION;
 		bird->dir_y = 0;
-		bird->sprite = '<';
+		bird->sprite = PLAYER_SPRITE_LEFT;
 	}
 	else if (key == MOVE_RIGHT) {
 		bird->dir_x = RIGHT_DIRECTION;
 		bird->dir_y = 0;
-		bird->sprite = '>';
+		bird->sprite = PLAYER_SPRITE_RIGHT;
 	}
 
 };

@@ -46,6 +46,7 @@ void draw_bird(BIRD *bird);
  * **Moves a bird**
  *
  * Moves the bird in the direction specified by the bird's dir_x and dir_y
+ * If the bird hits the wall, it will bounce back
  *
  * *Parameters:*
  * - **bird**: *pointer to a bird*

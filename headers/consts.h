@@ -12,4 +12,9 @@
 #define LEFT_DIRECTION -1
 #define RIGHT_DIRECTION 1
 
+#define PLAYER_SPRITE_UP '^'
+#define PLAYER_SPRITE_DOWN 'v'
+#define PLAYER_SPRITE_LEFT '<'
+#define PLAYER_SPRITE_RIGHT '>'
+
 #define FRAME_TIME 100 // Milliseconds Per Frame
