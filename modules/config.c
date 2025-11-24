@@ -13,6 +13,7 @@ char *Level_Name;
 int Game_Height = 10;
 int Game_Width = 50;
 
+// TODO: Move to utils.c
 void trim(char *string) {
 	int count = 0;
 	while (string[count] == ' ' || string[count] == '\t') {
@@ -86,11 +87,12 @@ void get_config(char *file) {
 		exit(EXIT_FAILURE);
 	}
 
-	char *line;
+	char line[256];
 	bool is_for_player = false;
 	bool is_for_hunter = false;
 
-	while (fscanf(config_file, "%m[^\n]\n", &line) != EOF) { // %m means match everything until the first = and \n and EOF means End Of File
+	// while (fscanf(config_file, "%m[^\n]\n", &line) != EOF) { // %m means match everything until the first = and \n and EOF means End Of File
+	while (fgets(line, sizeof(line), config_file)) { // %m means match everything until the first = and \n and EOF means End Of File
 
 		// TODO: this makes parsing stop, change to continue after implementing the rest
 		if (line[0] == '#' || line[0] == '\0') {

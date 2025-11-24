@@ -58,3 +58,33 @@ void move_bird(BIRD *bird) {
 
 	wrefresh(bird->parent_window->window);
 }
+
+void handle_bird_input(char key, BIRD *bird) {
+	if (key == MOVE_UP) {
+		bird->dir_y = UP_DIRECTION;
+		bird->dir_x = 0;
+		bird->sprite = PLAYER_SPRITE_UP;
+	} else if (key == MOVE_DOWN) {
+		bird->dir_y = DOWN_DIRECTION;
+		bird->dir_x = 0;
+		bird->sprite = PLAYER_SPRITE_DOWN;
+	} else if (key == MOVE_LEFT) {
+		bird->dir_x = LEFT_DIRECTION;
+		bird->dir_y = 0;
+		bird->sprite = PLAYER_SPRITE_LEFT;
+	} else if (key == MOVE_RIGHT) {
+		bird->dir_x = RIGHT_DIRECTION;
+		bird->dir_y = 0;
+		bird->sprite = PLAYER_SPRITE_RIGHT;
+	} else if (key == INCREASE_SPEED) {
+		bird->speed++;
+		if (bird->speed > Player_Max_Speed) {
+			bird->speed = Player_Max_Speed;
+		}
+	} else if (key == DECREASE_SPEED) {
+		bird->speed--;
+		if (bird->speed < Player_Min_Speed) {
+			bird->speed = Player_Min_Speed;
+		}
+	}
+}

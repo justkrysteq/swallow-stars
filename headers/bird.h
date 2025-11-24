@@ -52,3 +52,14 @@ void draw_bird(BIRD *bird);
  * - **bird**: *pointer to a bird*
  */
 void move_bird(BIRD *bird);
+
+/**
+ * **Handles bird input**
+ *
+ * Handles input from the user and updates the bird's direction and speed
+ *
+ * *Parameters:*
+ * - **key**: *key pressed*
+ * - **bird**: *pointer to a bird*
+ */
+void handle_bird_input(char key, BIRD *bird);

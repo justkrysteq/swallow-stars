@@ -27,7 +27,7 @@ typedef struct {
  *
  * *Returns:* game screen
  */
-WINDOW *start_game();
+WINDOW *start_game(void);
 
 /**
  * **Initializes a window**

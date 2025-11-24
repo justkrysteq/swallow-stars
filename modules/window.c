@@ -1,6 +1,6 @@
 #include "../headers/window.h"
 
-WINDOW *start_game() {
+WINDOW *start_game(void) {
 	WINDOW *win = initscr();
 
 	curs_set(0); // makes cursor invisible

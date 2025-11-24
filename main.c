@@ -1,36 +1,44 @@
 #include "headers/main.h"
 
-void handle_bird_input(WIN *game_window, char key, BIRD *bird) {
-	if (key == MOVE_UP) {
-		bird->dir_y = UP_DIRECTION;
-		bird->dir_x = 0;
-		bird->sprite = PLAYER_SPRITE_UP;
-	} else if (key == MOVE_DOWN) {
-		bird->dir_y = DOWN_DIRECTION;
-		bird->dir_x = 0;
-		bird->sprite = PLAYER_SPRITE_DOWN;
-	} else if (key == MOVE_LEFT) {
-		bird->dir_x = LEFT_DIRECTION;
-		bird->dir_y = 0;
-		bird->sprite = PLAYER_SPRITE_LEFT;
-	} else if (key == MOVE_RIGHT) {
-		bird->dir_x = RIGHT_DIRECTION;
-		bird->dir_y = 0;
-		bird->sprite = PLAYER_SPRITE_RIGHT;
-	} else if (key == INCREASE_SPEED) {
-		bird->speed++;
-		if (bird->speed > Player_Max_Speed) {
-			bird->speed = Player_Max_Speed;
-		}
-	} else if (key == DECREASE_SPEED) {
-		bird->speed--;
-		if (bird->speed < Player_Min_Speed) {
-			bird->speed = Player_Min_Speed;
-		}
-	}
-};
+// TODO: Move to utils.c
+/**
+ * **Generates a random number between min and max**
+ *
+ * Uses /dev/urandom to generate a random number between min and max (inclusive)
+ *
+ * *Parameters:*
+ * - **min**: *minimum value that the random number can be*
+ * - **max**: *maximum value that the random number can be*
+ *
+ * *Returns:* random number
+ */
+int get_random(int min, int max) {
+	int random_value;
 
-void run_game() {
+	FILE *dev_urandom = fopen("/dev/urandom", "rb");
+
+	// NOTE: if dev_urandom is not available using srand(time(NULL)) might be neccessary
+	if (dev_urandom == NULL) {
+		printf("Error opening /dev/urandom\n");
+		return -1;
+	}
+
+	if (fread(&random_value, sizeof(char), 1, dev_urandom) != 1) {
+		printf("Error reading from /dev/urandom\n");
+		return -1;
+	}
+		
+	fclose(dev_urandom);
+
+	return min + random_value % (max+1 - min);
+}
+
+// TODO: Move to stars.c with whole logic and struct
+void draw_star(WIN *parent_window, int x) {
+	mvwprintw(parent_window->window, 1, x, "%c", '*');
+}
+
+void run_game(void) {
 	WINDOW *screen = start_game();
 
 	WIN *game_window = init_window(screen, Game_Height, Game_Width, 0, 0, true, false);
@@ -47,7 +55,7 @@ void run_game() {
 			break;
 		}
 
-		handle_bird_input(game_window, key, bird);
+		handle_bird_input(key, bird);
 
 		update_status(status_window);
 
@@ -56,14 +64,20 @@ void run_game() {
 		clear_window(game_window);
 		draw_bird(bird);
 
+
+
+		// TODO: implement stars
+		int rnd = get_random(1, Game_Width-1);
+		draw_star(game_window, rnd);
+		
+
+
+		iteration++;
 		if (iteration % 10 == 0) {
 			Time_Limit--;
 		}
 
-		iteration++;
-
 		flushinp(); // avoids key press accumulation
-
     	usleep(FRAME_TIME * 1000); // receives value in microseconds
 	}
 
@@ -78,7 +92,8 @@ void run_game() {
 	free(bird);
 }
 
-int main(int argc, char *argv[]) {
+// int main(int argc, char *argv[]) {
+int main(void) {
 	get_config("game.conf");
 	run_game();
 
