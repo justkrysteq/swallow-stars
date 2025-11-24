@@ -28,8 +28,7 @@ void move_bird(BIRD *bird) {
 			bird->sprite = PLAYER_SPRITE_DOWN;
 		}
 		bird->y = new_y;
-	}
-	else if (bird->dir_y == DOWN_DIRECTION) {
+	} else if (bird->dir_y == DOWN_DIRECTION) {
 		float new_y = bird->y + DOWN_DIRECTION * bird->speed*0.5;
 		if (new_y > Game_Height - 2) {
 			new_y = Game_Height - 2.5;
@@ -47,8 +46,7 @@ void move_bird(BIRD *bird) {
 			bird->sprite = PLAYER_SPRITE_RIGHT;
 		}
 		bird->x = new_x;
-	}
-	else if (bird->dir_x == RIGHT_DIRECTION) {
+	} else if (bird->dir_x == RIGHT_DIRECTION) {
 		float new_x = bird->x + RIGHT_DIRECTION * bird->speed;
 		if (new_x > Game_Width - 2) {
 			new_x = Game_Width - 3;
