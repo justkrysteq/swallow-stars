@@ -69,16 +69,16 @@ void run_game(void) {
 		// TODO: implement stars
 		int rnd = get_random(1, Game_Width-1);
 		draw_star(game_window, rnd);
-		
 
 
 		iteration++;
-		if (iteration % 10 == 0) {
+		if (iteration % (FRAMES_PER_SECOND) == 0) {
 			Time_Limit--;
 		}
 
 		flushinp(); // avoids key press accumulation
-    	usleep(FRAME_TIME * 1000); // receives value in microseconds
+    	// usleep(FRAME_TIME * 1000); // receives value in microseconds
+		usleep(1000 / FRAMES_PER_SECOND * 1000);
 	}
 
 	delwin(game_window->window);

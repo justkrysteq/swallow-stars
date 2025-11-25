@@ -20,18 +20,20 @@ void draw_bird(BIRD *bird) {
 }
 
 void move_bird(BIRD *bird) {
+	const float speed_factor = (1000 / FRAMES_PER_SECOND) / 50.0;
+
 	if (bird->dir_y == UP_DIRECTION) {
-		float new_y = bird->y + UP_DIRECTION * bird->speed*0.5;
+		float new_y = bird->y + UP_DIRECTION * bird->speed*0.5*speed_factor;
 		if (new_y < 1) {
-			new_y = 2;
+			new_y = 1;
 			bird->dir_y = DOWN_DIRECTION;
 			bird->sprite = PLAYER_SPRITE_DOWN;
 		}
 		bird->y = new_y;
 	} else if (bird->dir_y == DOWN_DIRECTION) {
-		float new_y = bird->y + DOWN_DIRECTION * bird->speed*0.5;
+		float new_y = bird->y + DOWN_DIRECTION * bird->speed*0.5*speed_factor;
 		if (new_y > Game_Height - 2) {
-			new_y = Game_Height - 2.5;
+			new_y = Game_Height - 2;
 			bird->dir_y = UP_DIRECTION;
 			bird->sprite = PLAYER_SPRITE_UP;
 		}
@@ -39,17 +41,17 @@ void move_bird(BIRD *bird) {
 	}
 
 	if (bird->dir_x == LEFT_DIRECTION) {
-		float new_x = bird->x + LEFT_DIRECTION * bird->speed;
+		float new_x = bird->x + LEFT_DIRECTION * bird->speed*speed_factor;
 		if (new_x < 1) {
-			new_x = 2;
+			new_x = 1;
 			bird->dir_x = RIGHT_DIRECTION;
 			bird->sprite = PLAYER_SPRITE_RIGHT;
 		}
 		bird->x = new_x;
 	} else if (bird->dir_x == RIGHT_DIRECTION) {
-		float new_x = bird->x + RIGHT_DIRECTION * bird->speed;
+		float new_x = bird->x + RIGHT_DIRECTION * bird->speed*speed_factor;
 		if (new_x > Game_Width - 2) {
-			new_x = Game_Width - 3;
+			new_x = Game_Width - 2;
 			bird->dir_x = LEFT_DIRECTION;
 			bird->sprite = PLAYER_SPRITE_LEFT;
 		}

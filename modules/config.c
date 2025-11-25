@@ -13,7 +13,6 @@ char *Level_Name;
 int Game_Height = 10;
 int Game_Width = 50;
 
-// TODO: Move to utils.c
 void trim(char *string) {
 	int count = 0;
 	while (string[count] == ' ' || string[count] == '\t') {
@@ -40,6 +39,7 @@ void load_to_globals(char *option, char *value, bool is_for_player, bool is_for_
 		} else if (!strcmp(option, "life_force")) {
 			Player_Life_Force = atoi(value);
 		} else if (!strcmp(option, "name")) {
+			// strcpy(Player_Name, value);
 			Player_Name = value;
 		}
 	}

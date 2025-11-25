@@ -17,4 +17,4 @@
 #define PLAYER_SPRITE_LEFT '<'
 #define PLAYER_SPRITE_RIGHT '>'
 
-#define FRAME_TIME 100 // Milliseconds Per Frame
+#define FRAMES_PER_SECOND 200

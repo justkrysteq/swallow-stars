@@ -43,7 +43,13 @@ void update_status(WIN *status_window) {
 	clear_window(status_window);
 
 	mvwprintw(status_window->window, 0, 1, "Status");
-	mvwprintw(status_window->window, 1, 1, "Player: %s", Player_Name);
+	mvwprintw(status_window->window, 1, 1, "Player: %s", "krysteq");
+	// mvwprintw(status_window->window, 2, 1, "Level: %s", "1");
+	// mvwprintw(status_window->window, 3, 1, "Time left: %ds", 120);
+	// mvwprintw(status_window->window, 4, 1, "Star left to collect: %d", 12);
+	// mvwprintw(status_window->window, 5, 1, "Life force: %d", 8);
+
+	// mvwprintw(status_window->window, 1, 1, "Player: %s", Player_Name);
 	mvwprintw(status_window->window, 2, 1, "Level: %s", Level_Name);
 	mvwprintw(status_window->window, 3, 1, "Time left: %ds", Time_Limit);
 	mvwprintw(status_window->window, 4, 1, "Star left to collect: %d", Star_Quota);
