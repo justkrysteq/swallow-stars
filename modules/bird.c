@@ -8,9 +8,9 @@ BIRD *init_bird(WIN *parent_window, int y, int x) {
 	bird->x = x;
 	bird->dir_y = UP_DIRECTION;
 	bird->dir_x = 0;
-	bird->speed = Player_Initial_Speed;
-	bird->sprite = Player_Sprite;
-	bird->life_force = Player_Life_Force;
+	bird->speed = get_config()->player->initial_speed;
+	bird->sprite = PLAYER_SPRITE_UP;
+	bird->life_force = get_config()->player->life_force;
 
 	return bird;
 }
@@ -20,7 +20,7 @@ void draw_bird(BIRD *bird) {
 }
 
 void move_bird(BIRD *bird) {
-	const float speed_factor = (1000 / FRAMES_PER_SECOND) / 50.0;
+	const float speed_factor = (1000 / FRAMES_PER_SECOND) / 50.0; // NOTE: to to samo co 1000 / FRAMES_PER_SECOND * 50
 
 	if (bird->dir_y == UP_DIRECTION) {
 		float new_y = bird->y + UP_DIRECTION * bird->speed*0.5*speed_factor;
@@ -32,8 +32,8 @@ void move_bird(BIRD *bird) {
 		bird->y = new_y;
 	} else if (bird->dir_y == DOWN_DIRECTION) {
 		float new_y = bird->y + DOWN_DIRECTION * bird->speed*0.5*speed_factor;
-		if (new_y > Game_Height - 2) {
-			new_y = Game_Height - 2;
+		if (new_y > get_config()->game_height - 2) { // TODO: make this based on gamr_window instead of config ! needed for fog of war
+			new_y = get_config()->game_height - 2;
 			bird->dir_y = UP_DIRECTION;
 			bird->sprite = PLAYER_SPRITE_UP;
 		}
@@ -50,8 +50,8 @@ void move_bird(BIRD *bird) {
 		bird->x = new_x;
 	} else if (bird->dir_x == RIGHT_DIRECTION) {
 		float new_x = bird->x + RIGHT_DIRECTION * bird->speed*speed_factor;
-		if (new_x > Game_Width - 2) {
-			new_x = Game_Width - 2;
+		if (new_x > get_config()->game_width - 2) { // TODO: make this based on gamr_window instead of config ! needed for fog of war
+			new_x = get_config()->game_width - 2;
 			bird->dir_x = LEFT_DIRECTION;
 			bird->sprite = PLAYER_SPRITE_LEFT;
 		}
@@ -80,13 +80,13 @@ void handle_bird_input(char key, BIRD *bird) {
 		bird->sprite = PLAYER_SPRITE_RIGHT;
 	} else if (key == INCREASE_SPEED) {
 		bird->speed++;
-		if (bird->speed > Player_Max_Speed) {
-			bird->speed = Player_Max_Speed;
+		if (bird->speed > get_config()->player->max_speed) {
+			bird->speed = get_config()->player->max_speed;
 		}
 	} else if (key == DECREASE_SPEED) {
 		bird->speed--;
-		if (bird->speed < Player_Min_Speed) {
-			bird->speed = Player_Min_Speed;
+		if (bird->speed < get_config()->player->min_speed) {
+			bird->speed = get_config()->player->min_speed;
 		}
 	}
 }

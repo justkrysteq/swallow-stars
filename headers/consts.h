@@ -18,3 +18,4 @@
 #define PLAYER_SPRITE_RIGHT '>'
 
 #define FRAMES_PER_SECOND 200
+#define KEY_PRESS_LIMIT 2

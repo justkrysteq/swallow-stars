@@ -3,29 +3,50 @@
 #include <string.h>
 #include <stdbool.h>
 
+#pragma once // TODO: change to include guards
 // SECTION: GAME GLOBALS
 
-// **Number of stars required to win**
-extern int Star_Quota;
-// **Time (in seconds) left to collect stars**
-extern int Time_Limit;
-// **Hunter spawn rate per second**
-extern float Spawn_Rate;
-// **Game window height**
-extern int Game_Height;
-// **Game window width**
-extern int Game_Width;
-// **Name of the level**
-extern char *Level_Name;
+// // **Number of stars required to win**
+// extern int Star_Quota;
+// // **Time (in seconds) left to collect stars**
+// extern int Time_Limit;
+// // **Hunter spawn rate per second**
+// extern float Spawn_Rate;
+// // **Game window height**
+// extern int Game_Height;
+// // **Game window width**
+// extern int Game_Width;
+// // **Name of the level**
+// extern char *Level_Name;
 
 // SECTION: PLAYER GLOBALS
 
-extern char Player_Sprite;
-extern int Player_Initial_Speed;
-extern int Player_Min_Speed;
-extern int Player_Max_Speed;
-extern int Player_Life_Force;
-extern char *Player_Name;
+// extern char Player_Sprite;
+// extern int Player_Initial_Speed;
+// extern int Player_Min_Speed;
+// extern int Player_Max_Speed;
+// extern int Player_Life_Force;
+// extern char *Player_Name;
+
+// SECTION: NEW STRUCT TO REPLACE GLOBALS
+
+typedef struct {
+	int initial_speed;
+	int min_speed;
+	int max_speed;
+	int life_force;
+	char name[25];
+} PLAYER;
+
+typedef struct {
+	int star_quota;
+	int time_limit;
+	float spawn_rate;
+	int game_height;
+	int game_width;
+	char level_name[100];
+	PLAYER player[200]; // TODO: change to dynamic allocation
+} CONFIG;
 
 
 // SECTION: CONFIG FILE PARSING
@@ -50,7 +71,7 @@ void trim(char *string);
  * - **is_for_player**: *whether or not this is a player variable*
  * - **is_for_hunter**: *whether or not this is a hunter variable*
  */
-void load_to_globals(char *option, char *value, bool is_for_player, bool is_for_hunter);
+void load_to_globals(CONFIG *config, char *option, char *value, bool is_for_player, bool is_for_hunter);
 
 /**
  * **Splits a line into option and value and updates globals**
@@ -63,7 +84,7 @@ void load_to_globals(char *option, char *value, bool is_for_player, bool is_for_
  * - **is_for_player**: *whether or not this line is for player config*
  * - **is_for_hunter**: *whether or not this line is for hunter config*
  */
-void parse_line(char *line, bool is_for_player, bool is_for_hunter);
+void parse_line(CONFIG *config, char *line, bool is_for_player, bool is_for_hunter);
 
 /**
  * **Updates global variables with values from provided file**
@@ -71,4 +92,4 @@ void parse_line(char *line, bool is_for_player, bool is_for_hunter);
  * *Parameters:*
  * - **file**: *name of the config file*
  */
-void get_config(char *file);
+CONFIG *get_config(void);

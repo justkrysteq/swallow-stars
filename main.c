@@ -33,6 +33,17 @@ int get_random(int min, int max) {
 	return min + random_value % (max+1 - min);
 }
 
+// TODO: Move to utils.c
+bool contains(char array[], int array_size, char element) {
+	for (int i = 0; i < array_size; i++) {
+		if (array[i] == element) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 // TODO: Move to stars.c with whole logic and struct
 void draw_star(WIN *parent_window, int x) {
 	mvwprintw(parent_window->window, 1, x, "%c", '*');
@@ -41,17 +52,18 @@ void draw_star(WIN *parent_window, int x) {
 void run_game(void) {
 	WINDOW *screen = start_game();
 
-	WIN *game_window = init_window(screen, Game_Height, Game_Width, 0, 0, true, false);
-	WIN *status_window = init_window(screen, 7, Game_Width, game_window->height, 0, true, true);
+	WIN *game_window = init_window(screen, get_config()->game_height, get_config()->game_width, 0, 0, true, false);
+	WIN *status_window = init_window(screen, 7, get_config()->game_width, game_window->height, 0, true, true);
 	BIRD *bird = init_bird(game_window, game_window->height - 2, game_window->width / 2);
 
 	char key;
+	// char *keys_pressed[KEY_PRESS_LIMIT]; // TODO: IMPLEMENT IN LOOP
 	int iteration = 0;
 
 	while (true) {
 		key = wgetch(game_window->window);
 		
-		if (key == QUIT || Time_Limit == 0) {
+		if (key == QUIT || get_config()->time_limit == 0) {
 			break;
 		}
 
@@ -67,18 +79,18 @@ void run_game(void) {
 
 
 		// TODO: implement stars
-		int rnd = get_random(1, Game_Width-1);
+		int rnd = get_random(1, get_config()->game_width-1);
 		draw_star(game_window, rnd);
 
 
 		iteration++;
-		if (iteration % (FRAMES_PER_SECOND) == 0) {
-			Time_Limit--;
-		}
+		// if (iteration % (FRAMES_PER_SECOND) == 0) {
+		// 	Time_Limit--;
+		// }
 
 		flushinp(); // avoids key press accumulation
     	// usleep(FRAME_TIME * 1000); // receives value in microseconds
-		usleep(1000 / FRAMES_PER_SECOND * 1000);
+		usleep(1000 / FRAMES_PER_SECOND * 1000); // NOTE: To to samo co 1 / FRAMES_PER_SECOND xD
 	}
 
 	delwin(game_window->window);
@@ -90,11 +102,11 @@ void run_game(void) {
 	free(game_window);
 	free(status_window);
 	free(bird);
+	free(get_config());
 }
 
 // int main(int argc, char *argv[]) {
 int main(void) {
-	get_config("game.conf");
 	run_game();
 
 	return EXIT_SUCCESS;

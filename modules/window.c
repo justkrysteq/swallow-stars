@@ -6,6 +6,9 @@ WINDOW *start_game(void) {
 	curs_set(0); // makes cursor invisible
 	noecho();
 
+	cbreak();
+	nonl();
+
 	return win;
 }
 
@@ -50,10 +53,10 @@ void update_status(WIN *status_window) {
 	// mvwprintw(status_window->window, 5, 1, "Life force: %d", 8);
 
 	// mvwprintw(status_window->window, 1, 1, "Player: %s", Player_Name);
-	mvwprintw(status_window->window, 2, 1, "Level: %s", Level_Name);
-	mvwprintw(status_window->window, 3, 1, "Time left: %ds", Time_Limit);
-	mvwprintw(status_window->window, 4, 1, "Star left to collect: %d", Star_Quota);
-	mvwprintw(status_window->window, 5, 1, "Life force: %d", Player_Life_Force);
+	mvwprintw(status_window->window, 2, 1, "Level: %s", get_config()->level_name);
+	mvwprintw(status_window->window, 3, 1, "Time left: %ds", get_config()->time_limit);
+	mvwprintw(status_window->window, 4, 1, "Star left to collect: %d", get_config()->star_quota);
+	mvwprintw(status_window->window, 5, 1, "Life force: %d", get_config()->player->life_force);
 
 	wrefresh(status_window->window);
 }
