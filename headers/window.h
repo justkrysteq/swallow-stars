@@ -4,6 +4,8 @@
 
 #include "config.h"
 
+#pragma once
+
 /**
  * **ncurses window struct with attributes for later use**
  *
@@ -27,7 +29,7 @@ typedef struct {
  *
  * *Returns:* game screen
  */
-WINDOW *start_game(void);
+WINDOW *init_screen(void);
 
 /**
  * **Initializes a window**

@@ -17,9 +17,9 @@ typedef struct {
 	WIN *parent_window;
 	float y, x;
 	int dir_y, dir_x;
-	int speed; // speed of movement 1-5
+	unsigned int speed; // speed of movement 1-5
 	char sprite;
-	int life_force;
+	unsigned int life_force;
 } BIRD;
 
 /**

@@ -25,7 +25,7 @@
 			./swallow-stars
 		'';
 		
-		r = pkgs.writeShellScriptBin "a" ''
+		a = pkgs.writeShellScriptBin "a" ''
 			#!${pkgs.bash}/bin/bash
 			if [ -f ./swallow-stars ]; then
 				make clean;
@@ -43,7 +43,7 @@
 				gcc gnumake ncurses
 
 				# Aliases
-				m c run r
+				m c run a
 			];
 		};
 	};

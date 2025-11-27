@@ -15,8 +15,5 @@ swallow-stars: ${OBJS}
 main.o: main.c
 	${COMPILER} ${CFLAGS} main.c
 
-modules/%.o: modules/%.c
-	${COMPILER} ${CFLAGS} $< -o $@
-
 clean:
 	rm -f $(OBJS) swallow-stars

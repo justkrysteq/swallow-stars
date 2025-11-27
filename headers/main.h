@@ -6,3 +6,5 @@
 #include "consts.h"
 #include "bird.h"
 #include "config.h"
+#include "stars.h"
+#include "utils.h"

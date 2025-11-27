@@ -1,37 +1,9 @@
 #include "../headers/config.h"
 
-// int Star_Quota = 10;
-// int Time_Limit = 120;
-// float Spawn_Rate;
-// char Player_Sprite = '^';
-// int Player_Initial_Speed;
-// int Player_Min_Speed;
-// int Player_Max_Speed;
-// int Player_Life_Force;
-// char *Player_Name;
-// char *Level_Name;
-// int Game_Height = 10;
-// int Game_Width = 50;
-
-void trim(char *string) {
-	int count = 0;
-	while (string[count] == ' ' || string[count] == '\t') {
-		count++;
-	}
-
-	int i = 0;
-	while (string[i + count] != ' ' && string[i + count] != '\t' && string[i + count] != '#' && string[i + count] != '\0') {
-		string[i] = string[i + count];
-		i++;
-	}
-
-	string[i] = '\0';
-}
-
 void load_to_globals(CONFIG *config, char *option, char *value, bool is_for_player, bool is_for_hunter) {
 	if (is_for_player) {
 		// if (config->player == NULL) {
-		// 	config->player = (PLAYER *) malloc(sizeof(PLAYER));
+		// 	config->player = (PLAYER_CONFIG *) malloc(sizeof(PLAYER_CONFIG));
 		// }
 		if (!strcmp(option, "initial_speed")) {
 			config->player->initial_speed = atoi(value);
@@ -81,7 +53,7 @@ void parse_line(CONFIG *config, char *line, bool is_for_player, bool is_for_hunt
 	}
 }
 
-CONFIG *get_config(void) {
+const CONFIG *get_config(void) {
 	char *file = "game.conf";
 
 	static CONFIG *config = NULL;

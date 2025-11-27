@@ -1,6 +1,6 @@
 #include "../headers/window.h"
 
-WINDOW *start_game(void) {
+WINDOW *init_screen(void) {
 	WINDOW *win = initscr();
 
 	curs_set(0); // makes cursor invisible
@@ -13,7 +13,7 @@ WINDOW *start_game(void) {
 }
 
 WIN *init_window(WINDOW *parent_window, int height, int width, int start_y, int start_x, bool has_border, bool wait_for_input) {
-	WIN *win = (WIN *) malloc(sizeof(WIN)); // malloc returns a void pointer, so to access the memory with the -> operator conversion is necessary
+	WIN *win = (WIN *) malloc(sizeof(WIN));
 
 	win->window = subwin(parent_window, height, width, start_y, start_x);
 	win->start_y = start_y;
@@ -30,8 +30,6 @@ WIN *init_window(WINDOW *parent_window, int height, int width, int start_y, int 
 		nodelay(win->window, true);
 	}
 
-	// wrefresh(win->window);
-
 	return win;
 }
 
@@ -47,15 +45,9 @@ void update_status(WIN *status_window) {
 
 	mvwprintw(status_window->window, 0, 1, "Status");
 	mvwprintw(status_window->window, 1, 1, "Player: %s", "krysteq");
-	// mvwprintw(status_window->window, 2, 1, "Level: %s", "1");
-	// mvwprintw(status_window->window, 3, 1, "Time left: %ds", 120);
-	// mvwprintw(status_window->window, 4, 1, "Star left to collect: %d", 12);
-	// mvwprintw(status_window->window, 5, 1, "Life force: %d", 8);
-
-	// mvwprintw(status_window->window, 1, 1, "Player: %s", Player_Name);
 	mvwprintw(status_window->window, 2, 1, "Level: %s", get_config()->level_name);
 	mvwprintw(status_window->window, 3, 1, "Time left: %ds", get_config()->time_limit);
-	mvwprintw(status_window->window, 4, 1, "Star left to collect: %d", get_config()->star_quota);
+	mvwprintw(status_window->window, 4, 1, "Stars left to collect: %d", get_config()->star_quota);
 	mvwprintw(status_window->window, 5, 1, "Life force: %d", get_config()->player->life_force);
 
 	wrefresh(status_window->window);

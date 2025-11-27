@@ -2,65 +2,32 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "utils.h"
 
 #pragma once // TODO: change to include guards
-// SECTION: GAME GLOBALS
 
-// // **Number of stars required to win**
-// extern int Star_Quota;
-// // **Time (in seconds) left to collect stars**
-// extern int Time_Limit;
-// // **Hunter spawn rate per second**
-// extern float Spawn_Rate;
-// // **Game window height**
-// extern int Game_Height;
-// // **Game window width**
-// extern int Game_Width;
-// // **Name of the level**
-// extern char *Level_Name;
-
-// SECTION: PLAYER GLOBALS
-
-// extern char Player_Sprite;
-// extern int Player_Initial_Speed;
-// extern int Player_Min_Speed;
-// extern int Player_Max_Speed;
-// extern int Player_Life_Force;
-// extern char *Player_Name;
-
-// SECTION: NEW STRUCT TO REPLACE GLOBALS
+// SECTION: CONFIG STRUCTS
 
 typedef struct {
-	int initial_speed;
-	int min_speed;
-	int max_speed;
-	int life_force;
+	unsigned int initial_speed;
+	unsigned int min_speed;
+	unsigned int max_speed;
+	unsigned int life_force;
 	char name[25];
-} PLAYER;
+} PLAYER_CONFIG;
 
 typedef struct {
-	int star_quota;
-	int time_limit;
+	unsigned int star_quota;
+	unsigned int time_limit;
 	float spawn_rate;
-	int game_height;
-	int game_width;
+	unsigned int game_height;
+	unsigned int game_width;
 	char level_name[100];
-	PLAYER player[200]; // TODO: change to dynamic allocation
+	PLAYER_CONFIG player[200]; // TODO: change to dynamic allocation
 } CONFIG;
 
 
 // SECTION: CONFIG FILE PARSING
-
-/**
- * **Trims a string**
- *
- * By removing all spaces and tabs from the beginning
- * If the string contains a space, tab, # or newline, everything after it will be removed
- *
- * *Parameters:*
- * - **string**: *string to be trimmed*
- */
-void trim(char *string);
 
 /**
  * **Updates a global variable with value provided**
@@ -92,4 +59,4 @@ void parse_line(CONFIG *config, char *line, bool is_for_player, bool is_for_hunt
  * *Parameters:*
  * - **file**: *name of the config file*
  */
-CONFIG *get_config(void);
+const CONFIG *get_config(void);

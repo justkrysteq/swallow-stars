@@ -32,8 +32,8 @@ void move_bird(BIRD *bird) {
 		bird->y = new_y;
 	} else if (bird->dir_y == DOWN_DIRECTION) {
 		float new_y = bird->y + DOWN_DIRECTION * bird->speed*0.5*speed_factor;
-		if (new_y > get_config()->game_height - 2) { // TODO: make this based on gamr_window instead of config ! needed for fog of war
-			new_y = get_config()->game_height - 2;
+		if (new_y > bird->parent_window->height - 2) {
+			new_y = bird->parent_window->height - 2;
 			bird->dir_y = UP_DIRECTION;
 			bird->sprite = PLAYER_SPRITE_UP;
 		}
@@ -50,8 +50,8 @@ void move_bird(BIRD *bird) {
 		bird->x = new_x;
 	} else if (bird->dir_x == RIGHT_DIRECTION) {
 		float new_x = bird->x + RIGHT_DIRECTION * bird->speed*speed_factor;
-		if (new_x > get_config()->game_width - 2) { // TODO: make this based on gamr_window instead of config ! needed for fog of war
-			new_x = get_config()->game_width - 2;
+		if (new_x > bird->parent_window->width - 2) {
+			new_x = bird->parent_window->width - 2;
 			bird->dir_x = LEFT_DIRECTION;
 			bird->sprite = PLAYER_SPRITE_LEFT;
 		}
@@ -90,3 +90,33 @@ void handle_bird_input(char key, BIRD *bird) {
 		}
 	}
 }
+
+// void handle_bird_input(char *keys_pressed, BIRD *bird) {
+// 	if (contains(keys_pressed, KEY_PRESS_LIMIT, MOVE_UP)) {
+// 		bird->dir_y = UP_DIRECTION;
+// 		bird->dir_x = 0;
+// 		bird->sprite = PLAYER_SPRITE_UP;
+// 	} else if (contains(keys_pressed, KEY_PRESS_LIMIT, MOVE_DOWN)) {
+// 		bird->dir_y = DOWN_DIRECTION;
+// 		bird->dir_x = 0;
+// 		bird->sprite = PLAYER_SPRITE_DOWN;
+// 	} else if (contains(keys_pressed, KEY_PRESS_LIMIT, MOVE_LEFT)) {
+// 		bird->dir_x = LEFT_DIRECTION;
+// 		bird->dir_y = 0;
+// 		bird->sprite = PLAYER_SPRITE_LEFT;
+// 	} else if (contains(keys_pressed, KEY_PRESS_LIMIT, MOVE_RIGHT)) {
+// 		bird->dir_x = RIGHT_DIRECTION;
+// 		bird->dir_y = 0;
+// 		bird->sprite = PLAYER_SPRITE_RIGHT;
+// 	} else if (contains(keys_pressed, KEY_PRESS_LIMIT, INCREASE_SPEED)) {
+// 		bird->speed++;
+// 		if (bird->speed > get_config()->player->max_speed) {
+// 			bird->speed = get_config()->player->max_speed;
+// 		}
+// 	} else if (contains(keys_pressed, KEY_PRESS_LIMIT, DECREASE_SPEED)) {
+// 		bird->speed--;
+// 		if (bird->speed < get_config()->player->min_speed) {
+// 			bird->speed = get_config()->player->min_speed;
+// 		}
+// 	}
+// }
