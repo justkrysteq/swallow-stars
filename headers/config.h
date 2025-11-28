@@ -19,7 +19,8 @@ typedef struct {
 typedef struct {
 	unsigned int star_quota;
 	unsigned int time_limit;
-	float spawn_rate;
+	float hunter_spawn_rate;
+	float star_spawn_rate;
 	unsigned int game_height;
 	unsigned int game_width;
 	char level_name[100];
@@ -52,6 +53,15 @@ void load_to_config(CONFIG *config, const char *option, const char *value, const
  * - **is_for_hunter**: *whether or not this line is for hunter config*
  */
 void parse_line(CONFIG *config, char *line, const bool is_for_player, const bool is_for_hunter);
+
+/** **Loads config from file**
+ *
+ * *Parameters:*
+ * - **file**: *file to load config from*
+ *
+ * *Returns:* config struct
+ */
+CONFIG *init_config(char *file);
 
 /**
  * **Accesses config struct**

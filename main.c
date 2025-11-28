@@ -11,12 +11,12 @@ void run_game(void) {
 	int iteration = 0;
 
 	// TODO: implement stars
-	int rnd = get_random(1, game_window->width-2);
-	STAR *star = init_star(game_window, rnd);
+	STAR *stars[MAX_STARS];
+	int stars_count = 0;
 
 	while (true) {
 		key = (char) wgetch(game_window->window);
-		
+
 		if (key == QUIT || get_config()->time_limit == 0) {
 			break;
 		}
@@ -27,10 +27,32 @@ void run_game(void) {
 
 		// TODO: implement updating whole game window, atm this is here:
 		move_bird(bird);
+
+		// TODO: load star spawn rate from config
+		// if (iteration % (int) (FRAMES_PER_SECOND/get_config()->star_spawn_rate) == 0) {
+		if (iteration % (FRAMES_PER_SECOND/2) == 0) {
+			if (stars_count < MAX_STARS) {
+				// NOTE: This has to init a star to the first one that does not exist
+				// If a star has exists set to false, nullify it and free it, then init
+				stars[stars_count] = init_star(game_window, get_random(BORDER_SIZE, game_window->width - BORDER_SIZE - 1)); // TODO: needs to be freed later on
+				stars_count++;
+			}
+		}
+
+		for (int i = 0; i < stars_count; i++) {
+			move_star(stars[i]);
+		}
+		
 		clear_window(game_window);
 		draw_bird(bird);
-		draw_star(star);
 
+		for (int i = 0; i < stars_count; i++) {
+			draw_star(*stars[i]);
+			// if (!stars[i]->exists) {
+			// 	free(stars[i]);
+			// 	stars_count--;
+			// }
+		}
 
 		iteration++;
 		// if (iteration % (FRAMES_PER_SECOND) == 0) {
@@ -51,7 +73,10 @@ void run_game(void) {
 	free(status_window);
 	free(bird);
 	free((void *) get_config());
-	free(star);
+
+	for (int i = 0; i < stars_count; i++) {
+		free(stars[i]);
+	}
 }
 
 // int main(int argc, char *argv[]) {

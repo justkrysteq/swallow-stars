@@ -1,9 +1,11 @@
 #include "window.h"
+#include "consts.h"
 
 typedef struct {
 	float x, y;
 	float speed;
 	char sprite;
+	bool exists;
 	WIN *parent_window;
 } STAR;
 
@@ -13,7 +15,7 @@ typedef struct {
  * *Parameters:*
  * - **star**: *star to be drawn*
  */
-void draw_star(STAR *star);
+void draw_star(const STAR star);
 
 /**
  * **Initializes a star**
@@ -25,3 +27,11 @@ void draw_star(STAR *star);
  * *Returns:* pointer to a star
  */
 STAR *init_star(WIN *parent_window, int x);
+
+/**
+ * **Moves a star**
+ *
+ * *Parameters:*
+ * - **star**: *star to be moved*
+ */
+void move_star(STAR *star);
