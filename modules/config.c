@@ -1,6 +1,6 @@
 #include "../headers/config.h"
 
-void load_to_globals(CONFIG *config, char *option, char *value, bool is_for_player, bool is_for_hunter) {
+void load_to_config(CONFIG *config, const char *option, const char *value, const bool is_for_player, const bool is_for_hunter) {
 	if (is_for_player) {
 		// if (config->player == NULL) {
 		// 	config->player = (PLAYER_CONFIG *) malloc(sizeof(PLAYER_CONFIG));
@@ -38,7 +38,7 @@ void load_to_globals(CONFIG *config, char *option, char *value, bool is_for_play
 	}
 }
 
-void parse_line(CONFIG *config, char *line, bool is_for_player, bool is_for_hunter) {
+void parse_line(CONFIG *config, char *line, const bool is_for_player, const bool is_for_hunter) {
 	char *option;
 	char *value;
 
@@ -49,7 +49,7 @@ void parse_line(CONFIG *config, char *line, bool is_for_player, bool is_for_hunt
 		trim(option);
 		trim(value);
 
-		load_to_globals(config, option, value, is_for_player, is_for_hunter);
+		load_to_config(config, option, value, is_for_player, is_for_hunter);
 	}
 }
 
@@ -62,7 +62,7 @@ const CONFIG *get_config(void) {
 		config = (CONFIG *) malloc(sizeof(CONFIG));
 		FILE *config_file = fopen(file, "r");
 
-		load_to_globals(config, "level_name", file, false, false);
+		load_to_config(config, "level_name", file, false, false);
 
 		if (!config_file) {
 			printf("Error: Could not open config file\n");

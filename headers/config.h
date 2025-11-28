@@ -30,18 +30,18 @@ typedef struct {
 // SECTION: CONFIG FILE PARSING
 
 /**
- * **Updates a global variable with value provided**
+ * **Updates config value with the provided value**
  *
  * *Parameters:*
- * - **option**: *name of the global variable*
+ * - **option**: *name of the config option*
  * - **value**: *new value*
- * - **is_for_player**: *whether or not this is a player variable*
- * - **is_for_hunter**: *whether or not this is a hunter variable*
+ * - **is_for_player**: *whether or not this is a player option*
+ * - **is_for_hunter**: *whether or not this is a hunter option*
  */
-void load_to_globals(CONFIG *config, char *option, char *value, bool is_for_player, bool is_for_hunter);
+void load_to_config(CONFIG *config, const char *option, const char *value, const bool is_for_player, const bool is_for_hunter);
 
 /**
- * **Splits a line into option and value and updates globals**
+ * **Splits a line into option and value and loads it into config**
  *
  * If the line contains '=' character, the line will be split into option and value
  * If the line does not contain '=' character, the line will be ignored
@@ -51,12 +51,11 @@ void load_to_globals(CONFIG *config, char *option, char *value, bool is_for_play
  * - **is_for_player**: *whether or not this line is for player config*
  * - **is_for_hunter**: *whether or not this line is for hunter config*
  */
-void parse_line(CONFIG *config, char *line, bool is_for_player, bool is_for_hunter);
+void parse_line(CONFIG *config, char *line, const bool is_for_player, const bool is_for_hunter);
 
 /**
- * **Updates global variables with values from provided file**
+ * **Accesses config struct**
  *
- * *Parameters:*
- * - **file**: *name of the config file*
+ * *Returns:* config struct
  */
 const CONFIG *get_config(void);
