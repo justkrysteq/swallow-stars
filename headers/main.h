@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <curses.h>
@@ -6,5 +8,5 @@
 #include "consts.h"
 #include "bird.h"
 #include "config.h"
-#include "stars.h"
 #include "utils.h"
+#include "state.h"

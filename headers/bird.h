@@ -1,3 +1,5 @@
+#pragma once
+
 #include "window.h"
 #include "consts.h"
 #include "config.h"

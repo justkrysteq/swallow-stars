@@ -7,7 +7,7 @@ STATE *init_state(void) {
 	state->score = 0;
 	state->stars_collected = 0;
 	state->time_left = get_config()->time_limit;
-	// state->stars = 
+	// state->stars = create_star_table(game_window);
 
 	return state;
 }

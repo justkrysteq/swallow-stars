@@ -1,3 +1,5 @@
+#pragma once
+
 #include "stars.h"
 
 typedef struct {

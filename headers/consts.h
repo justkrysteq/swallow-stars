@@ -1,3 +1,5 @@
+#pragma once
+
 // ---- CONTROL KEYS ----
 #define QUIT 'q'
 #define MOVE_UP 'w'
@@ -21,4 +23,4 @@
 #define SPEED_FACTOR (1000/(FRAMES_PER_SECOND*50.0))
 
 #define BORDER_SIZE 1
-#define MAX_STARS 100
+#define MAX_STARS 25

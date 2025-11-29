@@ -1,10 +1,10 @@
+#pragma once
+
 #include <curses.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "config.h"
-
-#pragma once
 
 /**
  * **ncurses window struct with attributes for later use**

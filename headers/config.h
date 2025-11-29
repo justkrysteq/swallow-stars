@@ -1,10 +1,10 @@
+#pragma once // TODO: change to include guards
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include "utils.h"
-
-#pragma once // TODO: change to include guards
 
 // SECTION: CONFIG STRUCTS
 
