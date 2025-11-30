@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "config.h"
+#include "consts.h"
 
 /**
  * **ncurses window struct with attributes for later use**
@@ -21,7 +22,7 @@ typedef struct {
 	int height, width;
 	int start_y, start_x;
 	bool has_border;
-	// int color;
+	int color_pair;
 } WIN;
 
 /**
@@ -45,7 +46,7 @@ WINDOW *init_screen(void);
  *
  * *Returns:* pointer to a window
  */
-WIN *init_window(WINDOW *parent_window, int height, int width, int start_y, int start_x, bool has_border, bool wait_for_input);
+WIN *init_window(WINDOW *parent_window, int height, int width, int start_y, int start_x, bool has_border, bool wait_for_input, int color_pair);
 
 /**
  * **Clears a window**

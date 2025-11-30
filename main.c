@@ -1,19 +1,47 @@
 #include "headers/main.h"
 
+void color_setup(void) {
+	if (!has_colors()) {
+		printf("[!] Your terminal does not support colors\n");
+	}
+
+	if (!can_change_color()) {
+		printf("[!] Your terminal does not support changing colors\n");
+	}
+
+	start_color();
+	init_color(COLOR_GAME_BACKGROUND, 12, 0, 240);
+	init_color(COLOR_GAME_FOREGROUND, 247, 0, 619);
+	init_color(COLOR_STATUS_BACKGROUND, 0, 0, 0);
+	init_color(COLOR_STATUS_FOREGROUND, 447, 0, 819);
+	init_color(COLOR_STAR, 999, 905, 0);
+	init_color(COLOR_BIRD_LIFE_FORCE_FULL, 117, 999, 0);
+	init_color(COLOR_BIRD_LIFE_FORCE_HALF, 999, 624, 0);
+	init_color(COLOR_BIRD_LIFE_FORCE_LAST, 999, 0, 0);
+
+	init_pair(PAIR_GAME_DEFAULT, COLOR_GAME_FOREGROUND, COLOR_GAME_BACKGROUND);
+	init_pair(PAIR_STATUS, COLOR_STATUS_FOREGROUND, COLOR_STATUS_BACKGROUND);
+	init_pair(PAIR_STAR, COLOR_STAR, COLOR_GAME_BACKGROUND);
+	init_pair(PAIR_BIRD_LIFE_FORCE_FULL, COLOR_BIRD_LIFE_FORCE_FULL, COLOR_GAME_BACKGROUND);
+	init_pair(PAIR_BIRD_LIFE_FORCE_HALF, COLOR_BIRD_LIFE_FORCE_HALF, COLOR_GAME_BACKGROUND);
+	init_pair(PAIR_BIRD_LIFE_FORCE_LAST, COLOR_BIRD_LIFE_FORCE_LAST, COLOR_GAME_BACKGROUND);
+}
+
 void run_game(void) {
 	WINDOW *screen = init_screen();
 
-	WIN *game_window = init_window(screen, get_config()->game_height, get_config()->game_width, 0, 0, true, false);
-	WIN *status_window = init_window(screen, 7, get_config()->game_width, game_window->height, 0, true, true);
+	color_setup();
+
+	WIN *game_window = init_window(screen, get_config()->game_height, get_config()->game_width, 0, 0, true, false, PAIR_GAME_DEFAULT);
+	WIN *status_window = init_window(screen, 7, get_config()->game_width, game_window->height, 0, true, true, PAIR_STATUS);
 	BIRD *bird = init_bird(game_window, game_window->height - 2, game_window->width / 2);
 
 	// NOTE: TEMP
-	WIN *occupancy_window = init_window(screen, get_config()->game_height, get_config()->game_width, game_window->height+15, 0, false, false);
+	WIN *occupancy_window = init_window(screen, get_config()->game_height, get_config()->game_width, game_window->height+15, 0, false, false, PAIR_GAME_DEFAULT);
 
 	char key;
 	int iteration = 0;
 
-	// get_state()->stars = create_star_table(game_window);
 	STATE *game_state = init_state();
 	STAR *stars = create_star_table(game_window); // TODO: move to init_state
 	OCCUPANT **occupancy_map = create_occupancy_map(game_window);
@@ -53,6 +81,7 @@ void run_game(void) {
 			draw_star(stars[i]);
 		}
 
+		// NOTE: temp
 		if (key == 'm' || key == 'b') {
 			print_occupancy_map(occupancy_map, occupancy_window);
 		}

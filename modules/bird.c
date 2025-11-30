@@ -16,7 +16,19 @@ BIRD *init_bird(WIN *parent_window, int y, int x) {
 }
 
 void draw_bird(BIRD *bird) {
-	mvwprintw(bird->parent_window->window, bird->y, bird->x, "%c", bird->sprite);
+	if (bird->life_force > get_config()->player->life_force / 2) {
+		wattron(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_FULL));
+		mvwprintw(bird->parent_window->window, bird->y, bird->x, "%c", bird->sprite);
+		wattroff(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_FULL));
+	} else if (bird->life_force <= get_config()->player->life_force / 2) {
+		wattron(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_HALF));
+		mvwprintw(bird->parent_window->window, bird->y, bird->x, "%c", bird->sprite);
+		wattroff(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_HALF));
+	} else {
+		wattron(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_LAST));
+		mvwprintw(bird->parent_window->window, bird->y, bird->x, "%c", bird->sprite);
+		wattroff(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_LAST));
+	}
 }
 
 void move_bird(BIRD *bird) {

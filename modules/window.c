@@ -12,7 +12,7 @@ WINDOW *init_screen(void) {
 	return win;
 }
 
-WIN *init_window(WINDOW *parent_window, int height, int width, int start_y, int start_x, bool has_border, bool wait_for_input) {
+WIN *init_window(WINDOW *parent_window, int height, int width, int start_y, int start_x, bool has_border, bool wait_for_input, int color_pair) {
 	WIN *win = (WIN *) malloc(sizeof(WIN));
 
 	win->window = subwin(parent_window, height, width, start_y, start_x);
@@ -21,6 +21,7 @@ WIN *init_window(WINDOW *parent_window, int height, int width, int start_y, int 
 	win->height = height;
 	win->width = width;
 	win->has_border = has_border;
+	win->color_pair = color_pair;
 
 	if (has_border) {
 		box(win->window, 0, 0);
@@ -34,14 +35,23 @@ WIN *init_window(WINDOW *parent_window, int height, int width, int start_y, int 
 }
 
 void clear_window(WIN *window) {
-	werase(window->window);
+	wattron(window->window, COLOR_PAIR(window->color_pair));
+	// werase(window->window);
 	if (window->has_border) {
 		box(window->window, 0, 0);
 	}
+	for (int i = 1; i < window->height-1; i++) {
+		for (int j = 1; j < window->width-1; j++) {
+			mvwaddch(window->window, i, j, ' ');
+		}
+	}
+	wattroff(window->window, COLOR_PAIR(window->color_pair));
 }
 
 void update_status(WIN *status_window, const unsigned int time_left, const unsigned int stars_collected, const unsigned int bird_life_force) {
 	clear_window(status_window);
+
+	wattron(status_window->window, COLOR_PAIR(status_window->color_pair));
 
 	mvwprintw(status_window->window, 0, 1, "Status");
 	mvwprintw(status_window->window, 1, 1, "Player: %s", "krysteq");
@@ -49,6 +59,8 @@ void update_status(WIN *status_window, const unsigned int time_left, const unsig
 	mvwprintw(status_window->window, 3, 1, "Time left: %ds", time_left);
 	mvwprintw(status_window->window, 4, 1, "Stars left to collect: %d", get_config()->star_quota - stars_collected);
 	mvwprintw(status_window->window, 5, 1, "Life force: %d", bird_life_force);
+
+	wattroff(status_window->window, COLOR_PAIR(status_window->color_pair));
 
 	wrefresh(status_window->window);
 }

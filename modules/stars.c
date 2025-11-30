@@ -2,7 +2,9 @@
 
 void draw_star(const STAR star) {
 	if (star.exists) {
+		wattron(star.parent_window->window, COLOR_PAIR(PAIR_STAR));
 		mvwprintw(star.parent_window->window, star.y, star.x, "%c", star.sprite);
+		wattroff(star.parent_window->window, COLOR_PAIR(PAIR_STAR));
 	}
 }
 

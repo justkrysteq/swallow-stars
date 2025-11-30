@@ -16,4 +16,4 @@ void update_occupancy_map(OCCUPANT **occupancy_map, const unsigned int prev_y, c
 
 void free_occupancy_map(OCCUPANT **occupancy_map, WIN *parent_window);
 
-void print_occupancy_map(OCCUPANT **occupancy_map, WIN *parent_window);
+void print_occupancy_map(OCCUPANT **occupancy_map, const WIN *parent_window);
