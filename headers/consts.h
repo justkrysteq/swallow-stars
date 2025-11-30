@@ -20,7 +20,13 @@
 #define PLAYER_SPRITE_RIGHT '>'
 
 #define FRAMES_PER_SECOND 200
-#define SPEED_FACTOR (1000/(FRAMES_PER_SECOND*50.0))
+#define SPEED_FACTOR (1000/(FRAMES_PER_SECOND*100.0))
 
 #define BORDER_SIZE 1
 #define MAX_STARS 25
+
+#define BIRD_TYPE 'b'
+#define HUNTER_TYPE 'h'
+#define STAR_TYPE 's'
+#define EMPTY_TYPE 'e'
+#define WALL_TYPE 'w'

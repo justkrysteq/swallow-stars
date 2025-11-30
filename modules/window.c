@@ -40,15 +40,15 @@ void clear_window(WIN *window) {
 	}
 }
 
-void update_status(WIN *status_window) {
+void update_status(WIN *status_window, const unsigned int time_left, const unsigned int stars_collected, const unsigned int bird_life_force) {
 	clear_window(status_window);
 
 	mvwprintw(status_window->window, 0, 1, "Status");
 	mvwprintw(status_window->window, 1, 1, "Player: %s", "krysteq");
 	mvwprintw(status_window->window, 2, 1, "Level: %s", get_config()->level_name);
-	mvwprintw(status_window->window, 3, 1, "Time left: %ds", get_config()->time_limit);
-	mvwprintw(status_window->window, 4, 1, "Stars left to collect: %d", get_config()->star_quota);
-	mvwprintw(status_window->window, 5, 1, "Life force: %d", get_config()->player->life_force);
+	mvwprintw(status_window->window, 3, 1, "Time left: %ds", time_left);
+	mvwprintw(status_window->window, 4, 1, "Stars left to collect: %d", get_config()->star_quota - stars_collected);
+	mvwprintw(status_window->window, 5, 1, "Life force: %d", bird_life_force);
 
 	wrefresh(status_window->window);
 }

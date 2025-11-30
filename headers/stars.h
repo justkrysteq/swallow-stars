@@ -36,7 +36,7 @@ STAR init_star(WIN *parent_window);
  * *Parameters:*
  * - **star**: *star to be moved*
  */
-void move_star(STAR *star);
+void move_star(STAR *star, bool change_sprite);
 
 STAR *create_star_table(WIN *parent_window);
 

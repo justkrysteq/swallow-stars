@@ -3,8 +3,6 @@
 void draw_star(const STAR star) {
 	if (star.exists) {
 		mvwprintw(star.parent_window->window, star.y, star.x, "%c", star.sprite);
-	// } else {
-	// 	free(star);
 	}
 }
 
@@ -21,13 +19,22 @@ STAR init_star(WIN *parent_window) {
 	return star;
 }
 
-void move_star(STAR *star) {
+void move_star(STAR *star, bool change_sprite) {
 	if (star->exists) {
 		star->y += DOWN_DIRECTION * star->speed * SPEED_FACTOR;
-		if (star->y > star->parent_window->height - BORDER_SIZE) {
-			star->exists = false;
-			star->y = BORDER_SIZE;
+
+		if (change_sprite) {
+			if (star->sprite == '*') {
+				star->sprite = '+';
+			} else if (star->sprite == '+') {
+				star->sprite = '*';
+			}
 		}
+
+		// NOTE: now handled in update_occupancy_map may be useful with large speeds
+		// if (star->y > star->parent_window->height - BORDER_SIZE) {
+		// 	star->exists = false;
+		// }
 	}
 }
 
@@ -45,6 +52,7 @@ void spawn_star(STAR *stars) {
 	for (int i = 0; i < MAX_STARS; i++) {
 		if (!stars[i].exists) {
 			stars[i].exists = true;
+			stars[i].y = BORDER_SIZE;
 			stars[i].x = get_random(BORDER_SIZE, stars[i].parent_window->width - BORDER_SIZE - 1);
 
 			return;

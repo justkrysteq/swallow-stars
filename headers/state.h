@@ -1,14 +1,14 @@
 #pragma once
 
+#include "consts.h"
 #include "stars.h"
+// #include "occupancy_map.h"
 
 typedef struct {
 	bool running;
-	int score;
-	int stars_collected;
-	int time_left;
-	// TODO: occupancy map
-	STAR *stars;
+	unsigned int score;
+	unsigned int stars_collected;
+	unsigned int time_left;
 } STATE;
 
 /**
@@ -23,4 +23,4 @@ STATE *init_state(void);
  *
  * *Returns*: A pointer to the current game state
  */
-STATE *get_state(void);
+// STATE *get_state(void);

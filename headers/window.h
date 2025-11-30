@@ -60,5 +60,8 @@ void clear_window(WIN *window);
  *
  * *Parameters:*
  * - **status_window**: *pointer to status window*
+ * - **time_left**: *time left in game*
+ * - **stars_collected**: *stars collected in game*
+ * - **bird_life_force**: *bird's life force*
  */
-void update_status(WIN *status_window);
+void update_status(WIN *status_window, const unsigned int time_left, const unsigned int stars_collected, const unsigned int bird_life_force);
