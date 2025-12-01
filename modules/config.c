@@ -1,6 +1,8 @@
 #include "../headers/config.h"
 
 void load_to_config(CONFIG *config, const char *option, const char *value, const bool is_for_player, const bool is_for_hunter) {
+	static unsigned int hunter_count = 0;
+
 	if (is_for_player) {
 		// if (config->player == NULL) {
 		// 	config->player = (PLAYER_CONFIG *) malloc(sizeof(PLAYER_CONFIG));
@@ -19,7 +21,16 @@ void load_to_config(CONFIG *config, const char *option, const char *value, const
 	}
 	else if (is_for_hunter) {
 		// TODO: implement hunter config
-		printf("hunter config\n");
+		if (!strcmp(option, "shape")) {
+			strcpy(config->hunters[hunter_count].shape, value);
+		} else if (!strcmp(option, "speed")) {
+			config->hunters[hunter_count].speed = atof(value);
+		} else if (!strcmp(option, "damage")) {
+			config->hunters[hunter_count].damage = atoi(value);
+		} else if (!strcmp(option, "initial_bounces")) {
+			config->hunters[hunter_count].initial_bounces = atoi(value);
+			hunter_count++; // TODO: change this behavior cuz now initial_bounces has to be the last value of hunter
+		}
 	}
 	else {
 		if (!strcmp(option, "star_quota")) {
@@ -71,11 +82,8 @@ CONFIG *init_config(char *file) {
 	bool is_for_hunter = false;
 
 	while (fgets(line, sizeof(line), config_file)) {
-
-		// TODO: this makes parsing stop, change to continue after implementing the rest
-		if (line[0] == '#' || line[0] == '\0') { // TODO: change \0 to \n
-			// continue;
-			break;
+		if (line[0] == '#' || line[0] == '\n' || line[1] == '#') {
+			continue;
 		}
 
 		if (line[0] == '}') {
@@ -89,7 +97,9 @@ CONFIG *init_config(char *file) {
 				is_for_player = true;
 			}
 
-			// TODO: implement hunter config
+			if (strstr(line, "hunter")) {
+				is_for_hunter = true;
+			}
 		}
 
 		parse_line(config, line, is_for_player, is_for_hunter);

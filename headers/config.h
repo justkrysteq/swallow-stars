@@ -17,6 +17,13 @@ typedef struct {
 } PLAYER_CONFIG;
 
 typedef struct {
+	char shape[8];
+	float speed;
+	unsigned int damage;
+	unsigned int initial_bounces;
+} HUNTER_CONFIG;
+
+typedef struct {
 	unsigned int star_quota;
 	unsigned int time_limit;
 	float hunter_spawn_rate;
@@ -25,6 +32,7 @@ typedef struct {
 	unsigned int game_width;
 	char level_name[100];
 	PLAYER_CONFIG player[200]; // TODO: change to dynamic allocation
+	HUNTER_CONFIG hunters[500]; // TODO: change to dynamic allocation
 } CONFIG;
 
 
