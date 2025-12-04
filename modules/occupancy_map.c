@@ -81,6 +81,13 @@ void update_occupancy_map(OCCUPANT **occupancy_map, const unsigned int prev_y, c
 				STAR *star = (STAR *) entity;
 				star->exists = false;
 			}
+		// } else if (type == HUNTER_TYPE) { // TODO: IMPROVE
+		// 	HUNTER *hunter = (HUNTER *) entity;
+		//
+		// 	if (strcmp(hunter->shape, "2x2")) {
+		// 		if (occupancy_map[y][x].type == BIRD_TYPE) {
+		// 		}
+		// 	}
 		}
 	}
 }

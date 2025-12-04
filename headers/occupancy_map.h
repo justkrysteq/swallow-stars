@@ -1,7 +1,8 @@
 #pragma once
 
 #include "consts.h"
-#include "bird.h"
+#include "stars.h"
+#include "hunters.h"
 #include "state.h"
 
 typedef struct {

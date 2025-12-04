@@ -8,7 +8,7 @@ typedef struct {
 	unsigned int speed, bounces, damage;
 	char shape[8];
 	// float spawn_chance;
-	bool exists;
+	bool exists, is_dashing, is_waiting, in_bounce_state;
 	WIN *parent_window;
 } HUNTER;
 
@@ -16,8 +16,8 @@ HUNTER init_hunter(WIN *parent_window);
 
 HUNTER *create_hunter_table(WIN *parent_window);
 
-void spawn_hunter(HUNTER *hunters, BIRD *bird);
+void spawn_hunter(HUNTER *hunters, const BIRD *bird);
 
 void draw_hunter(const HUNTER hunter);
 
-void move_hunter(HUNTER *hunter);
+void move_hunter(HUNTER *hunter, const BIRD *bird);

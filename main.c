@@ -17,7 +17,10 @@ void color_setup(void) {
 	init_color(COLOR_STAR, 999, 905, 0);
 	init_color(COLOR_BIRD_LIFE_FORCE_FULL, 117, 999, 0);
 	init_color(COLOR_BIRD_LIFE_FORCE_HALF, 999, 624, 0);
-	init_color(COLOR_BIRD_LIFE_FORCE_LAST, 999, 0, 0);
+	init_color(COLOR_BIRD_LIFE_FORCE_LAST, 999, 300, 0);
+	init_color(COLOR_HUNTER_DAMAGE_HIGH, 999, 0, 0);
+	init_color(COLOR_HUNTER_DAMAGE_MEDIUM, 700, 0, 999);
+	init_color(COLOR_HUNTER_DAMAGE_LOW, 400, 800, 999);
 
 	init_pair(PAIR_GAME_DEFAULT, COLOR_GAME_FOREGROUND, COLOR_GAME_BACKGROUND);
 	init_pair(PAIR_STATUS, COLOR_STATUS_FOREGROUND, COLOR_STATUS_BACKGROUND);
@@ -25,6 +28,9 @@ void color_setup(void) {
 	init_pair(PAIR_BIRD_LIFE_FORCE_FULL, COLOR_BIRD_LIFE_FORCE_FULL, COLOR_GAME_BACKGROUND);
 	init_pair(PAIR_BIRD_LIFE_FORCE_HALF, COLOR_BIRD_LIFE_FORCE_HALF, COLOR_GAME_BACKGROUND);
 	init_pair(PAIR_BIRD_LIFE_FORCE_LAST, COLOR_BIRD_LIFE_FORCE_LAST, COLOR_GAME_BACKGROUND);
+	init_pair(PAIR_HUNTER_DAMAGE_HIGH, COLOR_HUNTER_DAMAGE_HIGH, COLOR_GAME_BACKGROUND);
+	init_pair(PAIR_HUNTER_DAMAGE_MEDIUM, COLOR_HUNTER_DAMAGE_MEDIUM, COLOR_GAME_BACKGROUND);
+	init_pair(PAIR_HUNTER_DAMAGE_LOW, COLOR_HUNTER_DAMAGE_LOW, COLOR_GAME_BACKGROUND);
 }
 
 void run_game(void) {
@@ -66,6 +72,9 @@ void run_game(void) {
 
 		if (iteration % (int) (FRAMES_PER_SECOND/get_config()->star_spawn_rate) == 0) {
 			spawn_star(stars);
+		}
+
+		if (iteration % (int) (FRAMES_PER_SECOND/get_config()->hunter_spawn_rate) == 0) {
 			spawn_hunter(hunters, bird);
 		}
 
@@ -77,7 +86,15 @@ void run_game(void) {
 		}
 
 		for (int i = 0; i < MAX_HUNTERS; i++) {
-			move_hunter(&hunters[i]);
+			// int hunter_y = hunters[i].y;
+			// int hunter_x = hunters[i].x;
+			move_hunter(&hunters[i], bird);
+			// if (strcmp(hunters[i].shape, "2x2") == 0) { // NOTE: this approach might trigger collisions many times
+			// 	update_occupancy_map(occupancy_map, hunter_y, hunter_x, hunters[i].y, hunters[i].x, HUNTER_TYPE, &hunters[i], game_state);
+			// 	update_occupancy_map(occupancy_map, hunter_y, hunter_x+1, hunters[i].y, hunters[i].x+1, HUNTER_TYPE, &hunters[i], game_state);
+			// 	update_occupancy_map(occupancy_map, hunter_y+1, hunter_x+1, hunters[i].y+1, hunters[i].x+1, HUNTER_TYPE, &hunters[i], game_state);
+			// 	update_occupancy_map(occupancy_map, hunter_y+1, hunter_x, hunters[i].y+1, hunters[i].x, HUNTER_TYPE, &hunters[i], game_state);
+			// }
 		}
 		
 		clear_window(game_window);

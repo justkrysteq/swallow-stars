@@ -1,8 +1,7 @@
 #pragma once
 
 #include "consts.h"
-#include "stars.h"
-// #include "occupancy_map.h"
+#include "config.h"
 
 typedef struct {
 	bool running;

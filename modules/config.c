@@ -21,6 +21,7 @@ void load_to_config(CONFIG *config, const char *option, const char *value, const
 		// TODO: implement hunter config
 		if (!strcmp(option, "shape")) {
 			strcpy(config->hunters[hunter_count].shape, value);
+			config->hunters[hunter_count].shape[3] = '\0';
 		} else if (!strcmp(option, "speed")) {
 			config->hunters[hunter_count].speed = atof(value);
 		} else if (!strcmp(option, "damage")) {

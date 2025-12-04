@@ -7,7 +7,6 @@
 
 #include "consts.h"
 #include "bird.h"
-#include "hunters.h"
 #include "config.h"
 #include "utils.h"
 #include "state.h"
