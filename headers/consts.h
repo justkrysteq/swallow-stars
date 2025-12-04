@@ -24,6 +24,7 @@
 
 #define BORDER_SIZE 1
 #define MAX_STARS 25
+#define MAX_HUNTERS 25
 
 #define BIRD_TYPE 'b'
 #define HUNTER_TYPE 'h'

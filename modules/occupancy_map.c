@@ -74,7 +74,7 @@ void update_occupancy_map(OCCUPANT **occupancy_map, const unsigned int prev_y, c
 
 				occupancy_map[y][x].type = EMPTY_TYPE;
 				occupancy_map[y][x].entity = NULL;
-			} else if (occupancy_map[y][x].type == WALL_TYPE) {
+			} else if (occupancy_map[y][x].type == WALL_TYPE || occupancy_map[y][x].type == HUNTER_TYPE) {
 				occupancy_map[prev_y][prev_x].type = EMPTY_TYPE;
 				occupancy_map[prev_y][prev_x].entity = NULL;
 

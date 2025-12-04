@@ -1,7 +1,6 @@
 #include "../headers/config.h"
 
-void load_to_config(CONFIG *config, const char *option, const char *value, const bool is_for_player, const bool is_for_hunter) {
-	static unsigned int hunter_count = 0;
+void load_to_config(CONFIG *config, const char *option, const char *value, const bool is_for_player, const bool is_for_hunter, const unsigned int hunter_count) {
 
 	if (is_for_player) {
 		// if (config->player == NULL) {
@@ -18,8 +17,7 @@ void load_to_config(CONFIG *config, const char *option, const char *value, const
 		} else if (!strcmp(option, "name")) {
 			strcpy(config->player->name, value);
 		}
-	}
-	else if (is_for_hunter) {
+	} else if (is_for_hunter) {
 		// TODO: implement hunter config
 		if (!strcmp(option, "shape")) {
 			strcpy(config->hunters[hunter_count].shape, value);
@@ -29,10 +27,10 @@ void load_to_config(CONFIG *config, const char *option, const char *value, const
 			config->hunters[hunter_count].damage = atoi(value);
 		} else if (!strcmp(option, "initial_bounces")) {
 			config->hunters[hunter_count].initial_bounces = atoi(value);
-			hunter_count++; // TODO: change this behavior cuz now initial_bounces has to be the last value of hunter
+		} else if (!strcmp(option, "spawn_chance")) {
+			config->hunters[hunter_count].spawn_chance = atof(value);
 		}
-	}
-	else {
+	} else {
 		if (!strcmp(option, "star_quota")) {
 			config->star_quota = atoi(value);
 		} else if (!strcmp(option, "time_limit")) {
@@ -51,7 +49,7 @@ void load_to_config(CONFIG *config, const char *option, const char *value, const
 	}
 }
 
-void parse_line(CONFIG *config, char *line, const bool is_for_player, const bool is_for_hunter) {
+void parse_line(CONFIG *config, char *line, const bool is_for_player, const bool is_for_hunter, const unsigned int hunter_count) {
 	char *option;
 	char *value;
 
@@ -62,7 +60,7 @@ void parse_line(CONFIG *config, char *line, const bool is_for_player, const bool
 		trim(option);
 		trim(value);
 
-		load_to_config(config, option, value, is_for_player, is_for_hunter);
+		load_to_config(config, option, value, is_for_player, is_for_hunter, hunter_count);
 	}
 }
 
@@ -70,16 +68,16 @@ CONFIG *init_config(char *file) {
 	CONFIG *config = (CONFIG *) malloc(sizeof(CONFIG));
 	FILE *config_file = fopen(file, "r");
 
-	load_to_config(config, "level_name", file, false, false);
-
-	if (!config_file) {
-		printf("Error: Could not open config file\n");
-		exit(EXIT_FAILURE);
-	}
-
 	char line[256];
 	bool is_for_player = false;
 	bool is_for_hunter = false;
+	unsigned int hunter_count = 0;
+	load_to_config(config, "level_name", file, false, false, hunter_count);
+
+	if (!config_file) {
+		printf("Error: Could not open config file\n");
+		exit(EXIT_FAILURE); // TODO: CHECK WHAT IT ACTUALLY MEANS
+	}
 
 	while (fgets(line, sizeof(line), config_file)) {
 		if (line[0] == '#' || line[0] == '\n' || line[1] == '#') {
@@ -87,8 +85,13 @@ CONFIG *init_config(char *file) {
 		}
 
 		if (line[0] == '}') {
+			if (is_for_hunter) {
+				hunter_count++;
+			}
+
 			is_for_player = false;
 			is_for_hunter = false;
+
 			continue;
 		}
 
@@ -102,10 +105,12 @@ CONFIG *init_config(char *file) {
 			}
 		}
 
-		parse_line(config, line, is_for_player, is_for_hunter);
+		parse_line(config, line, is_for_player, is_for_hunter, hunter_count);
 	}
 
 	fclose(config_file);
+
+	config->hunter_count = hunter_count;
 
 	return config;
 }

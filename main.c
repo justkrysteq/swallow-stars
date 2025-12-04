@@ -43,7 +43,8 @@ void run_game(void) {
 	int iteration = 0;
 
 	STATE *game_state = init_state();
-	STAR *stars = create_star_table(game_window); // TODO: move to init_state
+	STAR *stars = create_star_table(game_window);
+	HUNTER *hunters = create_hunter_table(game_window);
 	OCCUPANT **occupancy_map = create_occupancy_map(game_window);
 
 	while (game_state->running) {
@@ -65,6 +66,7 @@ void run_game(void) {
 
 		if (iteration % (int) (FRAMES_PER_SECOND/get_config()->star_spawn_rate) == 0) {
 			spawn_star(stars);
+			spawn_hunter(hunters, bird);
 		}
 
 		for (int i = 0; i < MAX_STARS; i++) {
@@ -73,12 +75,20 @@ void run_game(void) {
 			move_star(&stars[i], (iteration % (int) ((FRAMES_PER_SECOND/get_config()->star_spawn_rate)/2) == 0));
 			update_occupancy_map(occupancy_map, star_y, star_x, stars[i].y, stars[i].x, STAR_TYPE, &stars[i], game_state);
 		}
+
+		for (int i = 0; i < MAX_HUNTERS; i++) {
+			move_hunter(&hunters[i]);
+		}
 		
 		clear_window(game_window);
 		draw_bird(bird);
 
 		for (int i = 0; i < MAX_STARS; i++) {
 			draw_star(stars[i]);
+		}
+
+		for (int i = 0; i < MAX_HUNTERS; i++) {
+			draw_hunter(hunters[i]);
 		}
 
 		// NOTE: temp
@@ -106,6 +116,7 @@ void run_game(void) {
 	free(status_window);
 	free(occupancy_window);
 	free(bird);
+	free(hunters);
 	free((void *) get_config());
 	free(stars);
 	free(game_state);

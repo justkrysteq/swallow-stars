@@ -8,20 +8,20 @@
  * **ncurses bird struct with attributes for later use**
  *
  * *Attributes:*
- * - **parent_window**: *pointer to parent window*
  * - **y**: *y coordinate of bird*
  * - **x**: *x coordinate of bird*
  * - **speed**: *speed of bird*
  * - **sprite**: *character to be displayed*
  * - **life_force**: *bird's hp*
+ * - **parent_window**: *pointer to parent window*
  */
 typedef struct {
-	WIN *parent_window;
 	float y, x;
 	int dir_y, dir_x;
 	unsigned int speed; // speed of movement 1-5
 	char sprite;
 	unsigned int life_force;
+	WIN *parent_window;
 } BIRD;
 
 /**
