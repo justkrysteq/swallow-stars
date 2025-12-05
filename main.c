@@ -31,6 +31,8 @@ void color_setup(void) {
 	init_pair(PAIR_HUNTER_DAMAGE_HIGH, COLOR_HUNTER_DAMAGE_HIGH, COLOR_GAME_BACKGROUND);
 	init_pair(PAIR_HUNTER_DAMAGE_MEDIUM, COLOR_HUNTER_DAMAGE_MEDIUM, COLOR_GAME_BACKGROUND);
 	init_pair(PAIR_HUNTER_DAMAGE_LOW, COLOR_HUNTER_DAMAGE_LOW, COLOR_GAME_BACKGROUND);
+	init_pair(PAIR_ALBATROSS_TAXI, COLOR_YELLOW, COLOR_STAR);
+	init_pair(PAIR_ALBATROSS_TAXI_TOP, COLOR_CYAN, COLOR_HUNTER_DAMAGE_LOW);
 }
 
 void run_game(void) {
@@ -52,6 +54,7 @@ void run_game(void) {
 	STAR *stars = create_star_table(game_window);
 	HUNTER *hunters = create_hunter_table(game_window);
 	OCCUPANT **occupancy_map = create_occupancy_map(game_window);
+	ALBATROSS_TAXI *taxi = init_albatross_taxi(game_window);
 
 	while (game_state->running) {
 		key = (char) wgetch(game_window->window);
@@ -60,52 +63,89 @@ void run_game(void) {
 			game_state->running = false;
 		}
 
-		handle_bird_input(key, bird);
-
 		update_status(status_window, game_state->time_left, game_state->stars_collected, bird->life_force);
 
-		// TODO: implement updating whole game window, atm this is here:
-		int bird_y = bird->y;
-		int bird_x = bird->x;
-		move_bird(bird);
-		update_occupancy_map(occupancy_map, bird_y, bird_x, bird->y, bird->x, BIRD_TYPE, bird, game_state);
+		if (!game_state->in_albatross_taxi) {
+			if (key == CALL_TAXI) {
+				game_state->in_albatross_taxi = true;
+				spawn_taxi(taxi, bird);
+			}
 
-		if (iteration % (int) (FRAMES_PER_SECOND/get_config()->star_spawn_rate) == 0) {
-			spawn_star(stars);
-		}
+			handle_bird_input(key, bird);
 
-		if (iteration % (int) (FRAMES_PER_SECOND/get_config()->hunter_spawn_rate) == 0) {
-			spawn_hunter(hunters, bird);
-		}
+			// TODO: implement updating whole game window, atm this is here:
+			int bird_y = bird->y;
+			int bird_x = bird->x;
+			move_bird(bird);
+			update_occupancy_map(occupancy_map, bird_y, bird_x, bird->y, bird->x, BIRD_TYPE, bird, game_state);
 
-		for (int i = 0; i < MAX_STARS; i++) {
-			int star_y = stars[i].y;
-			int star_x = stars[i].x;
-			move_star(&stars[i], (iteration % (int) ((FRAMES_PER_SECOND/get_config()->star_spawn_rate)/2) == 0));
-			update_occupancy_map(occupancy_map, star_y, star_x, stars[i].y, stars[i].x, STAR_TYPE, &stars[i], game_state);
-		}
+			if (iteration % (int) (FRAMES_PER_SECOND/get_config()->star_spawn_rate) == 0) {
+				spawn_star(stars);
+			}
 
-		for (int i = 0; i < MAX_HUNTERS; i++) {
-			// int hunter_y = hunters[i].y;
-			// int hunter_x = hunters[i].x;
-			move_hunter(&hunters[i], bird);
-			// if (strcmp(hunters[i].shape, "2x2") == 0) { // NOTE: this approach might trigger collisions many times
-			// 	update_occupancy_map(occupancy_map, hunter_y, hunter_x, hunters[i].y, hunters[i].x, HUNTER_TYPE, &hunters[i], game_state);
-			// 	update_occupancy_map(occupancy_map, hunter_y, hunter_x+1, hunters[i].y, hunters[i].x+1, HUNTER_TYPE, &hunters[i], game_state);
-			// 	update_occupancy_map(occupancy_map, hunter_y+1, hunter_x+1, hunters[i].y+1, hunters[i].x+1, HUNTER_TYPE, &hunters[i], game_state);
-			// 	update_occupancy_map(occupancy_map, hunter_y+1, hunter_x, hunters[i].y+1, hunters[i].x, HUNTER_TYPE, &hunters[i], game_state);
-			// }
-		}
-		
-		clear_window(game_window);
-		draw_bird(bird);
+			if (iteration % (int) (FRAMES_PER_SECOND/get_config()->hunter_spawn_rate) == 0 && game_state->safe_zone_time_left <= 0) {
+				spawn_hunter(hunters, bird);
+			}
 
-		for (int i = 0; i < MAX_STARS; i++) {
-			draw_star(stars[i]);
-		}
+			for (int i = 0; i < MAX_STARS; i++) {
+				int star_y = stars[i].y;
+				int star_x = stars[i].x;
+				move_star(&stars[i], (iteration % (int) ((FRAMES_PER_SECOND/get_config()->star_spawn_rate)/2) == 0));
+				update_occupancy_map(occupancy_map, star_y, star_x, stars[i].y, stars[i].x, STAR_TYPE, &stars[i], game_state);
+			}
 
-		for (int i = 0; i < MAX_HUNTERS; i++) {
-			draw_hunter(hunters[i]);
+			for (int i = 0; i < MAX_HUNTERS; i++) {
+				// int hunter_y = hunters[i].y;
+				// int hunter_x = hunters[i].x;
+				move_hunter(&hunters[i], bird);
+				// if (strcmp(hunters[i].shape, "2x2") == 0) { // NOTE: this approach might trigger collisions many times
+				// 	update_occupancy_map(occupancy_map, hunter_y, hunter_x, hunters[i].y, hunters[i].x, HUNTER_TYPE, &hunters[i], game_state);
+				// 	update_occupancy_map(occupancy_map, hunter_y, hunter_x+1, hunters[i].y, hunters[i].x+1, HUNTER_TYPE, &hunters[i], game_state);
+				// 	update_occupancy_map(occupancy_map, hunter_y+1, hunter_x+1, hunters[i].y+1, hunters[i].x+1, HUNTER_TYPE, &hunters[i], game_state);
+				// 	update_occupancy_map(occupancy_map, hunter_y+1, hunter_x, hunters[i].y+1, hunters[i].x, HUNTER_TYPE, &hunters[i], game_state);
+				// }
+			}
+			
+			clear_window(game_window);
+			draw_bird(bird);
+
+			for (int i = 0; i < MAX_STARS; i++) {
+				draw_star(stars[i]);
+			}
+
+			for (int i = 0; i < MAX_HUNTERS; i++) {
+				draw_hunter(hunters[i]);
+			}
+		} else {
+			if (taxi->exists) {
+				move_taxi(taxi);
+				clear_window(game_window);
+				if (!taxi->is_bird_inside) {
+					draw_bird(bird);
+				}
+				draw_taxi(*taxi);
+				wrefresh(game_window->window);
+			} else {
+				for (int i = 0; i < MAX_STARS; i++) {
+					if (stars[i].exists) {
+						stars[i].exists = false;
+					}
+				}
+
+				for (int i = 0; i < MAX_HUNTERS; i++) {
+					if (hunters[i].exists) {
+						hunters[i].exists = false;
+					}
+				}
+
+				game_state->in_albatross_taxi = false;
+				game_state->safe_zone_time_left = SAFE_ZONE_TIME;
+
+				clear_occupancy_map(occupancy_map, game_window);
+
+				bird->y = taxi->y;
+				bird->x = taxi->x;
+			}
 		}
 
 		// NOTE: temp
@@ -116,6 +156,7 @@ void run_game(void) {
 		iteration++;
 		if (iteration % (FRAMES_PER_SECOND) == 0) {
 			game_state->time_left--;
+			game_state->safe_zone_time_left--;
 		}
 
 		flushinp(); // avoids key press accumulation
@@ -137,6 +178,7 @@ void run_game(void) {
 	free((void *) get_config());
 	free(stars);
 	free(game_state);
+	free(taxi);
 }
 
 // int main(int argc, char *argv[]) {

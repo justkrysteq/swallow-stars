@@ -35,3 +35,7 @@ void trim(char *string) {
 
 	string[i] = '\0';
 }
+
+float calc_distance(const float delta_y, const float delta_x) {
+	return sqrt(pow(delta_y, 2) + pow(delta_x, 2));
+}

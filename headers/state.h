@@ -4,10 +4,11 @@
 #include "config.h"
 
 typedef struct {
-	bool running;
+	bool running, in_albatross_taxi;
 	unsigned int score;
 	unsigned int stars_collected;
 	unsigned int time_left;
+	int safe_zone_time_left;
 } STATE;
 
 /**

@@ -113,7 +113,7 @@ void move_hunter(HUNTER *hunter, const BIRD *bird) {
 				int delta_y = hunter->dest_y - hunter->y;
 				int delta_x = hunter->dest_x - hunter->x;
 
-				float distance = sqrt(pow(delta_y, 2) + pow(delta_x, 2));
+				float distance = calc_distance(delta_y, delta_x);
 
 				if (distance != 0) {
 					hunter->dir_y = delta_y / distance;

@@ -113,3 +113,14 @@ void print_occupancy_map(OCCUPANT **occupancy_map, const WIN *parent_window) {
 		}
 	}
 }
+
+void clear_occupancy_map(OCCUPANT **occupancy_map, const WIN *parent_window) {
+	for (int i = 0; i < parent_window->height; i++) {
+		for (int j = 0; j < parent_window->width; j++) {
+			if (occupancy_map[i][j].type != WALL_TYPE && occupancy_map[i][j].type != EMPTY_TYPE) {
+				occupancy_map[i][j].type = EMPTY_TYPE;
+				occupancy_map[i][j].entity = NULL;
+			}
+		}
+	}
+}

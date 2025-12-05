@@ -11,3 +11,4 @@
 #include "utils.h"
 #include "state.h"
 #include "occupancy_map.h"
+#include "albatross_taxi.h"

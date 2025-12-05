@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <math.h>
 
 /**
  * **Generates a random number between min and max**
@@ -25,3 +26,5 @@ int get_random(int min, int max);
  * - **string**: *string to be trimmed*
  */
 void trim(char *string);
+
+float calc_distance(const float delta_y, const float delta_x);

@@ -1,4 +1,3 @@
-#include <math.h>
 #include "bird.h"
 #include "consts.h"
 
