@@ -1,3 +1,4 @@
 *.o
 swallow-stars
 .ccls-cache
+ranking.txt

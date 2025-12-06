@@ -7,7 +7,7 @@ WINDOW *init_screen(void) {
 	noecho();
 
 	cbreak();
-	nonl();
+	// nonl();
 
 	return win;
 }
@@ -48,13 +48,13 @@ void clear_window(WIN *window) {
 	wattroff(window->window, COLOR_PAIR(window->color_pair));
 }
 
-void update_status(WIN *status_window, const unsigned int time_left, const unsigned int stars_collected, const unsigned int bird_life_force) {
+void update_status(WIN *status_window, const unsigned int time_left, const unsigned int stars_collected, const unsigned int bird_life_force, const char *player_name) {
 	clear_window(status_window);
 
 	wattron(status_window->window, COLOR_PAIR(status_window->color_pair));
 
 	mvwprintw(status_window->window, 0, 1, "Status");
-	mvwprintw(status_window->window, 1, 1, "Player: %s", "krysteq");
+	mvwprintw(status_window->window, 1, 1, "Player: %s", player_name);
 	mvwprintw(status_window->window, 2, 1, "Level: %s", get_config()->level_name);
 	mvwprintw(status_window->window, 3, 1, "Time left: %ds", time_left);
 	mvwprintw(status_window->window, 4, 1, "Stars left to collect: %d", get_config()->star_quota - stars_collected);

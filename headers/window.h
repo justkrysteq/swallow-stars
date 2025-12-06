@@ -65,4 +65,4 @@ void clear_window(WIN *window);
  * - **stars_collected**: *stars collected in game*
  * - **bird_life_force**: *bird's life force*
  */
-void update_status(WIN *status_window, const unsigned int time_left, const unsigned int stars_collected, const unsigned int bird_life_force);
+void update_status(WIN *status_window, const unsigned int time_left, const unsigned int stars_collected, const unsigned int bird_life_force, const char *player_name);
