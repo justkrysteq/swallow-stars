@@ -46,13 +46,25 @@ void load_to_config(CONFIG *config, const char *option, const char *value, const
 			config->game_width = atoi(value);
 		} else if (!strcmp(option, "level_name")) {
 			strcpy(config->level_name, value);
+		} else if (!strcmp(option, "hunter_spawn_rate_escalation")) {
+			config->hunter_spawn_rate_escalation = atof(value);
+		} else if (!strcmp(option, "hunter_initial_bounces_escalation")) {
+			config->hunter_initial_bounces_escalation = atof(value);
+		} else if (!strcmp(option, "score_life_multiplier")) {
+			config->score_life_multiplier = atof(value);
+		} else if (!strcmp(option, "score_star_multiplier")) {
+			config->score_star_multiplier = atof(value);
+		} else if (!strcmp(option, "score_time_multiplier")) {
+			config->score_time_multiplier = atof(value);
+		} else if (!strcmp(option, "score_difficulty_multiplier")) {
+			config->score_difficulty_multiplier = atof(value);
 		}
 	}
 }
 
 void parse_line(CONFIG *config, char *line, const bool is_for_player, const bool is_for_hunter, const unsigned int hunter_count) {
-	char *option;
-	char *value;
+	char *option = NULL;
+	char *value = NULL;
 
 	if (strchr(line, '=')) {
 		option = strtok(line, "=");

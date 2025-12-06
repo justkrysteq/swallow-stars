@@ -16,18 +16,28 @@ BIRD *init_bird(WIN *parent_window, int y, int x) {
 }
 
 void draw_bird(BIRD *bird) {
+	if (bird->dir_y == UP_DIRECTION) {
+		bird->sprite = PLAYER_SPRITE_UP;
+	} else if (bird->dir_y == DOWN_DIRECTION) {
+		bird->sprite = PLAYER_SPRITE_DOWN;
+	} else if (bird->dir_x == LEFT_DIRECTION) {
+		bird->sprite = PLAYER_SPRITE_LEFT;
+	} else if (bird->dir_x == RIGHT_DIRECTION) {
+		bird->sprite = PLAYER_SPRITE_RIGHT;
+	}
+
 	if (bird->life_force > get_config()->player->life_force / 2) {
 		wattron(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_FULL));
 		mvwprintw(bird->parent_window->window, bird->y, bird->x, "%c", bird->sprite);
 		wattroff(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_FULL));
+	} else if (bird->life_force == 1) {
+		wattron(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_LAST));
+		mvwprintw(bird->parent_window->window, bird->y, bird->x, "%c", bird->sprite);
+		wattroff(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_LAST));
 	} else if (bird->life_force <= get_config()->player->life_force / 2) {
 		wattron(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_HALF));
 		mvwprintw(bird->parent_window->window, bird->y, bird->x, "%c", bird->sprite);
 		wattroff(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_HALF));
-	} else {
-		wattron(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_LAST));
-		mvwprintw(bird->parent_window->window, bird->y, bird->x, "%c", bird->sprite);
-		wattroff(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_LAST));
 	}
 }
 
@@ -43,7 +53,6 @@ void move_bird(BIRD *bird) {
 		if (new_y < BORDER_SIZE) {
 			new_y = BORDER_SIZE;
 			bird->dir_y = DOWN_DIRECTION;
-			bird->sprite = PLAYER_SPRITE_DOWN;
 		}
 		bird->y = new_y;
 	} else if (bird->dir_y == DOWN_DIRECTION) {
@@ -51,7 +60,6 @@ void move_bird(BIRD *bird) {
 		if (new_y > bird->parent_window->height - BORDER_SIZE - 1) {
 			new_y = bird->parent_window->height - BORDER_SIZE - 1;
 			bird->dir_y = UP_DIRECTION;
-			bird->sprite = PLAYER_SPRITE_UP;
 		}
 		bird->y = new_y;
 	}
@@ -61,7 +69,6 @@ void move_bird(BIRD *bird) {
 		if (new_x < BORDER_SIZE) {
 			new_x = BORDER_SIZE;
 			bird->dir_x = RIGHT_DIRECTION;
-			bird->sprite = PLAYER_SPRITE_RIGHT;
 		}
 		bird->x = new_x;
 	} else if (bird->dir_x == RIGHT_DIRECTION) {
@@ -69,7 +76,6 @@ void move_bird(BIRD *bird) {
 		if (new_x > bird->parent_window->width - BORDER_SIZE - 1) {
 			new_x = bird->parent_window->width - BORDER_SIZE - 1;
 			bird->dir_x = LEFT_DIRECTION;
-			bird->sprite = PLAYER_SPRITE_LEFT;
 		}
 		bird->x = new_x;
 	}
@@ -81,19 +87,15 @@ void handle_bird_input(char key, BIRD *bird) {
 	if (key == MOVE_UP) {
 		bird->dir_y = UP_DIRECTION;
 		bird->dir_x = 0;
-		bird->sprite = PLAYER_SPRITE_UP;
 	} else if (key == MOVE_DOWN) {
 		bird->dir_y = DOWN_DIRECTION;
 		bird->dir_x = 0;
-		bird->sprite = PLAYER_SPRITE_DOWN;
 	} else if (key == MOVE_LEFT) {
 		bird->dir_x = LEFT_DIRECTION;
 		bird->dir_y = 0;
-		bird->sprite = PLAYER_SPRITE_LEFT;
 	} else if (key == MOVE_RIGHT) {
 		bird->dir_x = RIGHT_DIRECTION;
 		bird->dir_y = 0;
-		bird->sprite = PLAYER_SPRITE_RIGHT;
 	} else if (key == INCREASE_SPEED) {
 		bird->speed++;
 		if (bird->speed > get_config()->player->max_speed) {

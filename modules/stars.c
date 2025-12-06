@@ -41,7 +41,7 @@ void move_star(STAR *star, bool change_sprite) {
 }
 
 STAR *create_star_table(WIN *parent_window) {
-	STAR *stars = malloc(MAX_STARS * sizeof(STAR));
+	STAR *stars = (STAR *) malloc(MAX_STARS * sizeof(STAR));
 
 	for (int i = 0; i < MAX_STARS; i++) {
 		stars[i] = init_star(parent_window);

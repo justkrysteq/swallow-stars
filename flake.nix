@@ -40,7 +40,7 @@
 	{
 		devShells.x86_64-linux.default = pkgs.mkShell {
 			buildInputs = with pkgs; [
-				gcc gnumake ncurses
+				gcc gnumake ncurses # clang-tools
 
 				# Aliases
 				m c run a

@@ -1,7 +1,7 @@
 #include "../headers/utils.h"
 
 int get_random(int min, int max) {
-	int random_value;
+	int random_value = 0;
 
 	FILE *dev_urandom = fopen("/dev/urandom", "rb");
 

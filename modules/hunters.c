@@ -10,7 +10,7 @@ HUNTER init_hunter(WIN *parent_window) {
 }
 
 HUNTER *create_hunter_table(WIN *parent_window) {
-	HUNTER *hunters = malloc(MAX_HUNTERS * sizeof(HUNTER));
+	HUNTER *hunters = (HUNTER *) malloc(MAX_HUNTERS * sizeof(HUNTER));
 
 	for (int i = 0; i < MAX_HUNTERS; i++) {
 		hunters[i] = init_hunter(parent_window);
@@ -19,7 +19,7 @@ HUNTER *create_hunter_table(WIN *parent_window) {
 	return hunters;
 }
 
-void spawn_hunter(HUNTER *hunters, const BIRD *bird) {
+void spawn_hunter(HUNTER *hunters, const BIRD *bird, const float initial_bounces_escalation) {
 	for (int i = 0; i < MAX_HUNTERS; i++) {
 		if (!hunters[i].exists) {
 			int hunter_template_id = get_random(0, get_config()->hunter_count - 1);
@@ -33,14 +33,17 @@ void spawn_hunter(HUNTER *hunters, const BIRD *bird) {
 				hunters[i].x = spawns_on_left ? BORDER_SIZE : hunters[i].parent_window->width - BORDER_SIZE - 1;
 
 
-				hunters[i].bounces = get_config()->hunters[hunter_template_id].initial_bounces;
+				hunters[i].bounces = get_config()->hunters[hunter_template_id].initial_bounces + ((int) (1 * initial_bounces_escalation));
 				hunters[i].damage = get_config()->hunters[hunter_template_id].damage;
 				hunters[i].speed = get_config()->hunters[hunter_template_id].speed;
 				hunters[i].is_dashing = false;
 				hunters[i].is_waiting = false;
 				hunters[i].in_bounce_state = false;
 				// hunters[i].spawn_chance = get_config()->hunters[hunter_template_id].spawn_chance;
-				strcpy(hunters[i].shape, get_config()->hunters[hunter_template_id].shape);
+				// strcpy(hunters[i].shape, get_config()->hunters[hunter_template_id].shape);
+
+				hunters[i].height = get_config()->hunters[hunter_template_id].shape[0] - '0';
+				hunters[i].width = get_config()->hunters[hunter_template_id].shape[2] - '0';
 
 				hunters[i].dest_y = bird->y;
 				hunters[i].dest_x = bird->x;
@@ -50,6 +53,8 @@ void spawn_hunter(HUNTER *hunters, const BIRD *bird) {
 				// Fixes position-related issues from casting floats to ints
 				if (spawns_on_left) {
 					hunters[i].dest_x += 1;
+				} else {
+					hunters[i].x -= hunters[i].width + 1;
 				}
 
 				if (hunters[i].y < bird->y) {
@@ -75,19 +80,30 @@ void draw_hunter(const HUNTER hunter) { // TODO: implement drawing based on shap
 		// TODO: implement drawing based on shape
 		// mvwprintw(hunter.parent_window->window, hunter.y, hunter.x, "H");
 
-		if (strcmp(hunter.shape, "2x2") == 0) {
-			mvwprintw(hunter.parent_window->window, hunter.y, hunter.x, "/\\");
+		if (hunter.height == 2 && hunter.width == 2) {
+			mvwprintw(hunter.parent_window->window, hunter.y, hunter.x, "\\/");
 			mvwprintw(hunter.parent_window->window, hunter.y+1, hunter.x, "/\\");
+		} else if (hunter.height == 1 && hunter.width == 2) {
+			mvwprintw(hunter.parent_window->window, hunter.y, hunter.x, "[]");
+		} else if (hunter.height == 2 && hunter.width == 1) {
+			mvwprintw(hunter.parent_window->window, hunter.y, hunter.x, "#");
+			mvwprintw(hunter.parent_window->window, hunter.y+1, hunter.x, "#");
+		} else if (hunter.height == 1 && hunter.width == 3) {
+			mvwprintw(hunter.parent_window->window, hunter.y, hunter.x, "<=>");
+		} else {
+			for (unsigned int i = 0; i < hunter.height; i++) {
+				for (unsigned int j = 0; j < hunter.width; j++) {
+					mvwprintw(hunter.parent_window->window, hunter.y+i, hunter.x+j, "H");
+				}
+			}
 		}
-
-		if (strcmp(hunter.shape, "1x2") == 0) {
-			mvwprintw(hunter.parent_window->window, hunter.y, hunter.x, "H");
-			mvwprintw(hunter.parent_window->window, hunter.y+1, hunter.x, "H");
-		}
-
 		wattroff(hunter.parent_window->window, COLOR_PAIR(PAIR_HUNTER_DAMAGE_LOW));
 		wattroff(hunter.parent_window->window, COLOR_PAIR(PAIR_HUNTER_DAMAGE_MEDIUM));
 		wattroff(hunter.parent_window->window, COLOR_PAIR(PAIR_HUNTER_DAMAGE_HIGH));
+
+		wattron(hunter.parent_window->window, COLOR_PAIR(PAIR_HUNTER_LABEL));
+		mvwprintw(hunter.parent_window->window, hunter.y, hunter.x+hunter.width, "%d", hunter.bounces);
+		wattroff(hunter.parent_window->window, COLOR_PAIR(PAIR_HUNTER_LABEL));
 	}
 }
 
@@ -147,6 +163,55 @@ void move_hunter(HUNTER *hunter, const BIRD *bird) {
 		} else {
 			hunter->y += hunter->dir_y * hunter->speed * SPEED_FACTOR;
 			hunter->x += hunter->dir_x * hunter->speed * SPEED_FACTOR;
+		}
+
+		if (hunter->height == 3) {
+			hunter->y += UP_DIRECTION * hunter->speed * SPEED_FACTOR;
+		}
+
+		bool bounce_back = false;
+
+		if (hunter->y < BORDER_SIZE) {
+			hunter->y = BORDER_SIZE;
+			bounce_back = true;
+		} else if (hunter->y > hunter->parent_window->height - BORDER_SIZE - 1) {
+			hunter->y = hunter->parent_window->height - BORDER_SIZE - hunter->height;
+			bounce_back = true;
+		}
+
+		if (hunter->x < BORDER_SIZE) {
+			hunter->x = BORDER_SIZE;
+			bounce_back = true;
+		} else if (hunter->x > hunter->parent_window->width - BORDER_SIZE - 1) {
+			hunter->x = hunter->parent_window->width - BORDER_SIZE - hunter->width;
+			bounce_back = true;
+		}
+
+		if (bounce_back) { // TODO: make a function for this
+			hunter_bounce_back(hunter);
+			bounce_back = false;
+		}
+	}
+}
+
+void hunter_bounce_back(HUNTER *hunter) {
+	if (hunter->exists) {
+		hunter->dir_y *= -1;
+		hunter->dir_x *= -1;
+		hunter->in_bounce_state = true;
+		hunter->bounces--;
+
+		if (hunter->dir_x == 0 && hunter->dir_y == 0) {
+			hunter->dir_y = DOWN_DIRECTION;
+			hunter->dir_x = RIGHT_DIRECTION;
+		}
+
+		if (hunter->bounces <= 0) {
+			hunter->exists = false;
+			hunter->y = 0;
+			hunter->x = 0;
+			hunter->dir_y = 0;
+			hunter->dir_x = 0;
 		}
 	}
 }

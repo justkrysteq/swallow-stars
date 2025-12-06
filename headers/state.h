@@ -8,6 +8,8 @@ typedef struct {
 	unsigned int score;
 	unsigned int stars_collected;
 	unsigned int time_left;
+	float hunter_initial_bounces_escalation;
+	float hunter_spawn_rate_escalation;
 	int safe_zone_time_left;
 } STATE;
 

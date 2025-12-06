@@ -17,7 +17,7 @@ void color_setup(void) {
 	init_color(COLOR_STAR, 999, 905, 0);
 	init_color(COLOR_BIRD_LIFE_FORCE_FULL, 117, 999, 0);
 	init_color(COLOR_BIRD_LIFE_FORCE_HALF, 999, 624, 0);
-	init_color(COLOR_BIRD_LIFE_FORCE_LAST, 999, 300, 0);
+	init_color(COLOR_BIRD_LIFE_FORCE_LAST, 999, 200, 0);
 	init_color(COLOR_HUNTER_DAMAGE_HIGH, 999, 0, 0);
 	init_color(COLOR_HUNTER_DAMAGE_MEDIUM, 700, 0, 999);
 	init_color(COLOR_HUNTER_DAMAGE_LOW, 400, 800, 999);
@@ -33,6 +33,7 @@ void color_setup(void) {
 	init_pair(PAIR_HUNTER_DAMAGE_LOW, COLOR_HUNTER_DAMAGE_LOW, COLOR_GAME_BACKGROUND);
 	init_pair(PAIR_ALBATROSS_TAXI, COLOR_YELLOW, COLOR_STAR);
 	init_pair(PAIR_ALBATROSS_TAXI_TOP, COLOR_CYAN, COLOR_HUNTER_DAMAGE_LOW);
+	init_pair(PAIR_HUNTER_LABEL, COLOR_WHITE, COLOR_BLACK);
 }
 
 void run_game(void) {
@@ -40,17 +41,27 @@ void run_game(void) {
 
 	color_setup();
 
-	WIN *game_window = init_window(screen, get_config()->game_height, get_config()->game_width, 0, 0, true, false, PAIR_GAME_DEFAULT);
-	WIN *status_window = init_window(screen, 7, get_config()->game_width, game_window->height, 0, true, true, PAIR_STATUS);
+	int screen_center_x = (COLS - get_config()->game_width) / 2;
+	STATE *game_state = init_state();
+
+	// WIN *menu_window = init_window(screen, get_config()->game_height, get_config()->game_width, 0, screen_center_x, true, false, PAIR_GAME_DEFAULT);
+	//
+	// while (game_state->in_menu) {
+	// 	draw_menu(menu_window);
+	// 	wrefresh(menu_window->window);
+	// 	usleep(1000000 / FRAMES_PER_SECOND);
+	// }
+
+	WIN *game_window = init_window(screen, get_config()->game_height, get_config()->game_width, 0, screen_center_x, true, false, PAIR_GAME_DEFAULT);
+	WIN *status_window = init_window(screen, 7, get_config()->game_width, game_window->height, screen_center_x, true, true, PAIR_STATUS);
 	BIRD *bird = init_bird(game_window, game_window->height - 2, game_window->width / 2);
 
 	// NOTE: TEMP
 	WIN *occupancy_window = init_window(screen, get_config()->game_height, get_config()->game_width, game_window->height+15, 0, false, false, PAIR_GAME_DEFAULT);
 
-	char key;
+	char key = 0;
 	int iteration = 0;
 
-	STATE *game_state = init_state();
 	STAR *stars = create_star_table(game_window);
 	HUNTER *hunters = create_hunter_table(game_window);
 	OCCUPANT **occupancy_map = create_occupancy_map(game_window);
@@ -83,8 +94,9 @@ void run_game(void) {
 				spawn_star(stars);
 			}
 
-			if (iteration % (int) (FRAMES_PER_SECOND/get_config()->hunter_spawn_rate) == 0 && game_state->safe_zone_time_left <= 0) {
-				spawn_hunter(hunters, bird);
+			if (iteration % (int) (FRAMES_PER_SECOND/get_config()->hunter_spawn_rate + ((int) (1 * game_state->hunter_spawn_rate_escalation))) == 0 && game_state->safe_zone_time_left <= 0) {
+			// if (iteration % (int) (FRAMES_PER_SECOND/get_config()->hunter_spawn_rate) == 0 && game_state->safe_zone_time_left <= 0) {
+				spawn_hunter(hunters, bird, game_state->hunter_initial_bounces_escalation);
 			}
 
 			for (int i = 0; i < MAX_STARS; i++) {
@@ -95,15 +107,10 @@ void run_game(void) {
 			}
 
 			for (int i = 0; i < MAX_HUNTERS; i++) {
-				// int hunter_y = hunters[i].y;
-				// int hunter_x = hunters[i].x;
+				int hunter_y = hunters[i].y;
+				int hunter_x = hunters[i].x;
 				move_hunter(&hunters[i], bird);
-				// if (strcmp(hunters[i].shape, "2x2") == 0) { // NOTE: this approach might trigger collisions many times
-				// 	update_occupancy_map(occupancy_map, hunter_y, hunter_x, hunters[i].y, hunters[i].x, HUNTER_TYPE, &hunters[i], game_state);
-				// 	update_occupancy_map(occupancy_map, hunter_y, hunter_x+1, hunters[i].y, hunters[i].x+1, HUNTER_TYPE, &hunters[i], game_state);
-				// 	update_occupancy_map(occupancy_map, hunter_y+1, hunter_x+1, hunters[i].y+1, hunters[i].x+1, HUNTER_TYPE, &hunters[i], game_state);
-				// 	update_occupancy_map(occupancy_map, hunter_y+1, hunter_x, hunters[i].y+1, hunters[i].x, HUNTER_TYPE, &hunters[i], game_state);
-				// }
+				update_occupancy_map(occupancy_map, hunter_y, hunter_x, hunters[i].y, hunters[i].x, HUNTER_TYPE, &hunters[i], game_state);
 			}
 			
 			clear_window(game_window);
@@ -157,11 +164,26 @@ void run_game(void) {
 		if (iteration % (FRAMES_PER_SECOND) == 0) {
 			game_state->time_left--;
 			game_state->safe_zone_time_left--;
+			game_state->hunter_spawn_rate_escalation += get_config()->hunter_spawn_rate_escalation;
+			game_state->hunter_initial_bounces_escalation += get_config()->hunter_initial_bounces_escalation;
 		}
 
 		flushinp(); // avoids key press accumulation
 		usleep(1000000 / FRAMES_PER_SECOND);
 	}
+
+	// TODO: implement game over screen
+	// if (game_state->time_left == 0) {
+	// 	game_over(GAME_LOST);
+	// }
+	//
+	// if (bird->life_force <= 0) {
+	// 	game_over(GAME_LOST);
+	// }
+	//
+	// if (game_state->stars_collected == get_config()->star_quota) {
+	// 	game_over(GAME_WON);
+	// }
 
 	delwin(game_window->window);
 	delwin(status_window->window);
