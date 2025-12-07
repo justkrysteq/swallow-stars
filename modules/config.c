@@ -1,64 +1,77 @@
 #include "../headers/config.h"
 
-void load_to_config(CONFIG *config, const char *option, const char *value, const bool is_for_player, const bool is_for_hunter, const unsigned int hunter_count) {
+void load_player_to_config(CONFIG *config, const char *option, const char *value) {
+	if (!strcmp(option, "initial_speed")) {
+		config->player->initial_speed = atoi(value);
+	} else if (!strcmp(option, "min_speed")) {
+		config->player->min_speed = atoi(value);
+	} else if (!strcmp(option, "max_speed")) {
+		config->player->max_speed = atoi(value);
+	} else if (!strcmp(option, "life_force")) {
+		config->player->life_force = atoi(value);
+	} else if (!strcmp(option, "name")) {
+		strcpy(config->player->name, value);
+	}
+}
 
-	if (is_for_player) {
-		// if (config->player == NULL) {
-		// 	config->player = (PLAYER_CONFIG *) malloc(sizeof(PLAYER_CONFIG));
-		// }
-		if (!strcmp(option, "initial_speed")) {
-			config->player->initial_speed = atoi(value);
-		} else if (!strcmp(option, "min_speed")) {
-			config->player->min_speed = atoi(value);
-		} else if (!strcmp(option, "max_speed")) {
-			config->player->max_speed = atoi(value);
-		} else if (!strcmp(option, "life_force")) {
-			config->player->life_force = atoi(value);
-		} else if (!strcmp(option, "name")) {
-			strcpy(config->player->name, value);
-		}
-	} else if (is_for_hunter) {
-		// TODO: implement hunter config
-		if (!strcmp(option, "shape")) {
-			strcpy(config->hunters[hunter_count].shape, value);
-			config->hunters[hunter_count].shape[3] = '\0';
-		} else if (!strcmp(option, "speed")) {
-			config->hunters[hunter_count].speed = atof(value);
-		} else if (!strcmp(option, "damage")) {
-			config->hunters[hunter_count].damage = atoi(value);
-		} else if (!strcmp(option, "initial_bounces")) {
-			config->hunters[hunter_count].initial_bounces = atoi(value);
-		} else if (!strcmp(option, "spawn_chance")) {
-			config->hunters[hunter_count].spawn_chance = atof(value);
-		}
+void load_hunter_to_config(CONFIG *config, const char *option, const char *value, const unsigned int hunter_count) {
+	if (!strcmp(option, "shape")) {
+		strcpy(config->hunters[hunter_count].shape, value);
+		config->hunters[hunter_count].shape[3] = '\0';
+	} else if (!strcmp(option, "speed")) {
+		config->hunters[hunter_count].speed = atof(value);
+	} else if (!strcmp(option, "damage")) {
+		config->hunters[hunter_count].damage = atoi(value);
+	} else if (!strcmp(option, "initial_bounces")) {
+		config->hunters[hunter_count].initial_bounces = atoi(value);
+	} else if (!strcmp(option, "spawn_chance")) {
+		config->hunters[hunter_count].spawn_chance = atof(value);
+	}
+}
+
+void load_score_to_config(CONFIG *config, const char *option, const char *value) {
+	if (!strcmp(option, "score_life_multiplier")) {
+		config->score_life_multiplier = atof(value);
+	} else if (!strcmp(option, "score_star_multiplier")) {
+		config->score_star_multiplier = atof(value);
+	} else if (!strcmp(option, "score_time_multiplier")) {
+		config->score_time_multiplier = atof(value);
+	} else if (!strcmp(option, "score_difficulty_multiplier")) {
+		config->score_difficulty_multiplier = atof(value);
+	}
+}
+
+void load_global_to_config(CONFIG *config, const char *option, const char *value) {
+	if (!strcmp(option, "star_quota")) {
+		config->star_quota = atoi(value);
+	} else if (!strcmp(option, "time_limit")) {
+		config->time_limit = atoi(value);
+	} else if (!strcmp(option, "hunter_spawn_rate")) {
+		config->hunter_spawn_rate = atof(value);
+	} else if (!strcmp(option, "star_spawn_rate")) {
+		config->star_spawn_rate = atof(value);
+	} else if (!strcmp(option, "game_height")) {
+		config->game_height = atoi(value);
+	} else if (!strcmp(option, "game_width")) {
+		config->game_width = atoi(value);
+	} else if (!strcmp(option, "level_name")) {
+		strcpy(config->level_name, value);
+	} else if (!strcmp(option, "hunter_spawn_rate_escalation")) {
+		config->hunter_spawn_rate_escalation = atof(value);
+	} else if (!strcmp(option, "hunter_initial_bounces_escalation")) {
+		config->hunter_initial_bounces_escalation = atof(value);
 	} else {
-		if (!strcmp(option, "star_quota")) {
-			config->star_quota = atoi(value);
-		} else if (!strcmp(option, "time_limit")) {
-			config->time_limit = atoi(value);
-		} else if (!strcmp(option, "hunter_spawn_rate")) {
-			config->hunter_spawn_rate = atof(value);
-		} else if (!strcmp(option, "star_spawn_rate")) {
-			config->star_spawn_rate = atof(value);
-		} else if (!strcmp(option, "game_height")) {
-			config->game_height = atoi(value);
-		} else if (!strcmp(option, "game_width")) {
-			config->game_width = atoi(value);
-		} else if (!strcmp(option, "level_name")) {
-			strcpy(config->level_name, value);
-		} else if (!strcmp(option, "hunter_spawn_rate_escalation")) {
-			config->hunter_spawn_rate_escalation = atof(value);
-		} else if (!strcmp(option, "hunter_initial_bounces_escalation")) {
-			config->hunter_initial_bounces_escalation = atof(value);
-		} else if (!strcmp(option, "score_life_multiplier")) {
-			config->score_life_multiplier = atof(value);
-		} else if (!strcmp(option, "score_star_multiplier")) {
-			config->score_star_multiplier = atof(value);
-		} else if (!strcmp(option, "score_time_multiplier")) {
-			config->score_time_multiplier = atof(value);
-		} else if (!strcmp(option, "score_difficulty_multiplier")) {
-			config->score_difficulty_multiplier = atof(value);
-		}
+		load_score_to_config(config, option, value);
+	}
+}
+
+void load_to_config(CONFIG *config, const char *option, const char *value, const bool is_for_player, const bool is_for_hunter, const unsigned int hunter_count) {
+	if (is_for_player) {
+		load_player_to_config(config, option, value);
+	} else if (is_for_hunter) {
+		load_hunter_to_config(config, option, value, hunter_count);
+	} else {
+		load_global_to_config(config, option, value);
 	}
 }
 

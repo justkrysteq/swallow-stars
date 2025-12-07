@@ -15,7 +15,7 @@ BIRD *init_bird(WIN *parent_window, int y, int x) {
 	return bird;
 }
 
-void draw_bird(BIRD *bird, bool change_sprite) {
+void change_bird_sprite(BIRD *bird, bool change_sprite) {
 	if (!change_sprite) {
 		if (bird->dir_y == UP_DIRECTION) {
 			if (bird->sprite == PLAYER_SPRITE_UP) {
@@ -43,6 +43,10 @@ void draw_bird(BIRD *bird, bool change_sprite) {
 			}
 		}
 	}
+}
+
+void draw_bird(BIRD *bird, bool change_sprite) {
+	change_bird_sprite(bird, change_sprite);
 
 	if (bird->life_force > get_config()->player->life_force / 2) {
 		wattron(bird->parent_window->window, COLOR_PAIR(PAIR_BIRD_LIFE_FORCE_FULL));

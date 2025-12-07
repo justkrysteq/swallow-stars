@@ -17,8 +17,14 @@ HUNTER *create_hunter_table(WIN *parent_window);
 
 void spawn_hunter(HUNTER *hunters, const BIRD *bird, const float hunter_initial_bounces_escalation);
 
+void handle_hunter_spawn(HUNTER *hunter, const BIRD *bird, const float initial_bounces_escalation, const int hunter_template_id);
+
 void draw_hunter(const HUNTER hunter);
 
 void move_hunter(HUNTER *hunter, const BIRD *bird);
+
+void handle_hunter_movement(HUNTER *hunter, const BIRD *bird, int *function_calls);
+
+void handle_hunter_bounce(HUNTER *hunter);
 
 void hunter_bounce_back(HUNTER *hunter);
