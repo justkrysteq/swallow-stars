@@ -18,7 +18,7 @@ typedef struct {
  * *Parameters:*
  * - **star**: *star to be drawn*
  */
-void draw_star(const STAR star);
+void draw_star(STAR *star, const bool change_sprite);
 
 /**
  * **Initializes a star**
@@ -36,7 +36,7 @@ STAR init_star(WIN *parent_window);
  * *Parameters:*
  * - **star**: *star to be moved*
  */
-void move_star(STAR *star, bool change_sprite);
+void move_star(STAR *star);
 
 STAR *create_star_table(WIN *parent_window);
 

@@ -29,6 +29,7 @@ void color_setup(void) {
 	init_pair(PAIR_HUNTER_LABEL, COLOR_WHITE, COLOR_BLACK);
 	init_pair(PAIR_MENU_BUTTON, COLOR_BLACK, COLOR_WHITE);
 	init_pair(PAIR_MENU_BUTTON_SELECTED, COLOR_WHITE, COLOR_BLACK);
+	init_pair(PAIR_STAR_BLINK, COLOR_WHITE, COLOR_GAME_BACKGROUND);
 }
 
 void run_game(void) {
@@ -156,7 +157,7 @@ void run_game(void) {
 			for (int i = 0; i < MAX_STARS; i++) {
 				int star_y = stars[i].y;
 				int star_x = stars[i].x;
-				move_star(&stars[i], (iteration % (int) ((FRAMES_PER_SECOND/get_config()->star_spawn_rate)/2) == 0));
+				move_star(&stars[i]);
 				update_occupancy_map(occupancy_map, star_y, star_x, stars[i].y, stars[i].x, STAR_TYPE, &stars[i], game_state);
 			}
 
@@ -168,10 +169,10 @@ void run_game(void) {
 			}
 			
 			clear_window(game_window);
-			draw_bird(bird);
+			draw_bird(bird, (iteration % (int) ((FRAMES_PER_SECOND/get_config()->star_spawn_rate)/2) == 0));
 
 			for (int i = 0; i < MAX_STARS; i++) {
-				draw_star(stars[i]);
+				draw_star(&stars[i], (iteration % (int) ((FRAMES_PER_SECOND/get_config()->star_spawn_rate)/2) == 0));
 			}
 
 			for (int i = 0; i < MAX_HUNTERS; i++) {
@@ -182,7 +183,7 @@ void run_game(void) {
 				move_taxi(taxi);
 				clear_window(game_window);
 				if (!taxi->is_bird_inside) {
-					draw_bird(bird);
+					draw_bird(bird, (iteration % (int) ((FRAMES_PER_SECOND/get_config()->star_spawn_rate)/2) == 0));
 				}
 				draw_taxi(*taxi);
 				wrefresh(game_window->window);
@@ -226,20 +227,9 @@ void run_game(void) {
 		usleep(1000000 / FRAMES_PER_SECOND);
 	}
 
-	// TODO: implement game over screen
-	// if (game_state->time_left == 0) {
-	// 	game_over(false);
-	// }
-	//
-	// if (bird->life_force <= 0) {
-	// 	game_over(false);
-	// }
-	//
-	// if (game_state->stars_collected == get_config()->star_quota) {
-	// 	game_over(true);
-	// }
 
-	// TODO: Count score
+
+
 	game_state->score += get_config()->score_life_multiplier * bird->life_force;
 	game_state->score += get_config()->score_star_multiplier * game_state->stars_collected;
 	game_state->score += get_config()->score_time_multiplier * game_state->time_left;

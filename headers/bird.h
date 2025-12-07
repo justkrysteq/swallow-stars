@@ -20,7 +20,7 @@ typedef struct {
 	int dir_y, dir_x;
 	unsigned int speed; // speed of movement 1-5
 	char sprite;
-	unsigned int life_force;
+	int life_force;
 	WIN *parent_window;
 } BIRD;
 
@@ -42,7 +42,7 @@ BIRD *init_bird(WIN *parent_window, int y, int x);
  * *Parameters:*
  * - **bird**: *pointer to a bird*
  */
-void draw_bird(BIRD *bird);
+void draw_bird(BIRD *bird, bool change_sprite);
 
 /**
  * **Moves a bird**

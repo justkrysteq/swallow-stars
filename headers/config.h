@@ -10,7 +10,7 @@
 
 typedef struct {
 	unsigned int initial_speed, min_speed, max_speed;
-	unsigned int life_force;
+	int life_force;
 	char name[25];
 } PLAYER_CONFIG;
 

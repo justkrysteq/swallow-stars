@@ -1,10 +1,31 @@
 #include "../headers/stars.h"
 
-void draw_star(const STAR star) {
-	if (star.exists) {
-		wattron(star.parent_window->window, COLOR_PAIR(PAIR_STAR));
-		mvwprintw(star.parent_window->window, star.y, star.x, "%c", star.sprite);
-		wattroff(star.parent_window->window, COLOR_PAIR(PAIR_STAR));
+void draw_star(STAR *star, const bool change_sprite) {
+	if (star->exists) {
+		bool blinks = star->y > star->parent_window->height*3/4;
+
+		if (blinks) {
+			if (star->sprite == '+') {
+				wattron(star->parent_window->window, COLOR_PAIR(PAIR_STAR_BLINK));
+			} else {
+				wattron(star->parent_window->window, COLOR_PAIR(PAIR_STAR));
+			}
+		} else {
+			wattron(star->parent_window->window, COLOR_PAIR(PAIR_STAR));
+		}
+
+		if (change_sprite) {
+			if (star->sprite == STAR_SPRITE) {
+				star->sprite = STAR_SPRITE_BLINK;
+			} else if (star->sprite == STAR_SPRITE_BLINK) {
+				star->sprite = STAR_SPRITE;
+			}
+		}
+
+		mvwprintw(star->parent_window->window, star->y, star->x, "%c", star->sprite);
+
+		wattroff(star->parent_window->window, COLOR_PAIR(PAIR_STAR));
+		wattroff(star->parent_window->window, COLOR_PAIR(PAIR_STAR_BLINK));
 	}
 }
 
@@ -15,28 +36,15 @@ STAR init_star(WIN *parent_window) {
 	star.x = 0;
 	star.y = BORDER_SIZE;
 	star.speed = get_random(1, 5) * 0.1;
-	star.sprite = '*';
+	star.sprite = STAR_SPRITE;
 	star.exists = false;
 
 	return star;
 }
 
-void move_star(STAR *star, bool change_sprite) {
+void move_star(STAR *star) {
 	if (star->exists) {
 		star->y += DOWN_DIRECTION * star->speed * SPEED_FACTOR;
-
-		if (change_sprite) {
-			if (star->sprite == '*') {
-				star->sprite = '+';
-			} else if (star->sprite == '+') {
-				star->sprite = '*';
-			}
-		}
-
-		// NOTE: now handled in update_occupancy_map may be useful with large speeds
-		// if (star->y > star->parent_window->height - BORDER_SIZE) {
-		// 	star->exists = false;
-		// }
 	}
 }
 

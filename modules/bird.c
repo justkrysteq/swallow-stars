@@ -15,15 +15,33 @@ BIRD *init_bird(WIN *parent_window, int y, int x) {
 	return bird;
 }
 
-void draw_bird(BIRD *bird) {
-	if (bird->dir_y == UP_DIRECTION) {
-		bird->sprite = PLAYER_SPRITE_UP;
-	} else if (bird->dir_y == DOWN_DIRECTION) {
-		bird->sprite = PLAYER_SPRITE_DOWN;
-	} else if (bird->dir_x == LEFT_DIRECTION) {
-		bird->sprite = PLAYER_SPRITE_LEFT;
-	} else if (bird->dir_x == RIGHT_DIRECTION) {
-		bird->sprite = PLAYER_SPRITE_RIGHT;
+void draw_bird(BIRD *bird, bool change_sprite) {
+	if (!change_sprite) {
+		if (bird->dir_y == UP_DIRECTION) {
+			if (bird->sprite == PLAYER_SPRITE_UP) {
+				bird->sprite = PLAYER_SPRITE_UP_FLAPPING;
+			} else {
+				bird->sprite = PLAYER_SPRITE_UP;
+			}
+		} else if (bird->dir_y == DOWN_DIRECTION) {
+			if (bird->sprite == PLAYER_SPRITE_DOWN) {
+				bird->sprite = PLAYER_SPRITE_DOWN_FLAPPING;
+			} else {
+				bird->sprite = PLAYER_SPRITE_DOWN;
+			}
+		} else if (bird->dir_x == LEFT_DIRECTION) {
+			if (bird->sprite == PLAYER_SPRITE_LEFT) {
+				bird->sprite = PLAYER_SPRITE_LEFT_FLAPPING;
+			} else {
+				bird->sprite = PLAYER_SPRITE_LEFT;
+			}
+		} else if (bird->dir_x == RIGHT_DIRECTION) {
+			if (bird->sprite == PLAYER_SPRITE_RIGHT) {
+				bird->sprite = PLAYER_SPRITE_RIGHT_FLAPPING;
+			} else {
+				bird->sprite = PLAYER_SPRITE_RIGHT;
+			}
+		}
 	}
 
 	if (bird->life_force > get_config()->player->life_force / 2) {
