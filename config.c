@@ -146,7 +146,7 @@ const CONFIG *get_config(void) {
 	static CONFIG *config = NULL;
 
 	if (config == NULL) {
-		char file[20] = "level ?.conf";
+		char file[20] = "level_?.conf";
 		int *level = get_selected_level();
 
 		if (level == NULL) {
