@@ -1,4 +1,4 @@
-#include "../headers/colors.h"
+#include "colors.h"
 
 void init_colors(void) {
 	init_color(COLOR_GAME_BACKGROUND, 12, 0, 240);

@@ -1,4 +1,4 @@
-#include "../headers/hunters.h"
+#include "hunters.h"
 
 HUNTER init_hunter(WIN *parent_window) {
 	HUNTER hunter;
@@ -27,8 +27,6 @@ void spawn_hunter(HUNTER *hunters, const BIRD *bird, const float initial_bounces
 
 			if (will_spawn) {
 				handle_hunter_spawn(&hunters[i], bird, initial_bounces_escalation, hunter_template_id);
-
-				// TODO: move hunter spawn based on shape ??
 
 				// Fixes position-related issues from casting floats to ints
 				if (hunters[i].x < bird->x) {
@@ -89,7 +87,7 @@ void draw_hunter_sprite(const HUNTER hunter) {
 	}
 }
 
-void draw_hunter(const HUNTER hunter) { // TODO: implement drawing based on shape
+void draw_hunter(const HUNTER hunter) {
 	if (hunter.exists) {
 		if (hunter.damage >= HUNTER_DAMAGE_HIGH) {
 			wattron(hunter.parent_window->window, COLOR_PAIR(PAIR_HUNTER_DAMAGE_HIGH));

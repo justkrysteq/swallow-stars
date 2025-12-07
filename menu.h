@@ -2,9 +2,9 @@
 
 #include <unistd.h> // for usleep
 
-#include "../headers/consts.h"
-#include "../headers/window.h"
-#include "../headers/state.h"
+#include "consts.h"
+#include "window.h"
+#include "state.h"
 
 void handle_menu_input(WIN *menu_window, char key, STATE *game_state);
 void show_menu_errors(WIN *menu_window);

@@ -1,4 +1,4 @@
-#include "../headers/game.h"
+#include "game.h"
 
 void handle_taxi_state(WIN *game_window, BIRD *bird, STATE *game_state, ALBATROSS_TAXI *taxi, STAR *stars, HUNTER *hunters, OCCUPANT **occupancy_map) {
 	if (taxi->exists) {
@@ -119,16 +119,10 @@ void game_loop(WIN *game_window, WIN *status_window, BIRD *bird, STAR *stars, HU
 			handle_taxi_state(game_window, bird, game_state, taxi, stars, hunters, occupancy_map);
 		}
 
-		// NOTE: temp
-		// if (key == 'm' || key == 'b') {
-		// 	print_occupancy_map(occupancy_map, occupancy_window);
-		// }
-
-
 		handle_time_pass(game_state, iteration);
 
 		iteration++;
-		flushinp(); // avoids key press accumulation
+		flushinp();
 		usleep(1000000 / FRAMES_PER_SECOND);
 	}
 }
@@ -150,7 +144,6 @@ void handle_game_exit(WIN *game_window, WIN *status_window, BIRD *bird, HUNTER *
 	free_occupancy_map(occupancy_map, game_window);
 	free(game_window);
 	free(status_window);
-	// free(occupancy_window);
 	free(bird);
 	free(hunters);
 	free(stars);
@@ -160,9 +153,6 @@ void handle_game_exit(WIN *game_window, WIN *status_window, BIRD *bird, HUNTER *
 void open_game(WINDOW *screen, STATE *game_state, int screen_center_x) {
 	WIN *game_window = init_window(screen, get_config()->game_height, get_config()->game_width, 0, screen_center_x, true, false, PAIR_GAME_DEFAULT);
 	WIN *status_window = init_window(screen, 7, get_config()->game_width, game_window->height, screen_center_x, true, true, PAIR_STATUS);
-
-	// NOTE: TEMP
-	// WIN *occupancy_window = init_window(screen, get_config()->game_height, get_config()->game_width, game_window->height+15, 0, false, false, PAIR_GAME_DEFAULT);
 
 	BIRD *bird = init_bird(game_window, game_window->height - 2, game_window->width / 2);
 	STAR *stars = create_star_table(game_window);

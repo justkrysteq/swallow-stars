@@ -1,4 +1,4 @@
-#include "../headers/config.h"
+#include "config.h"
 
 void load_player_to_config(CONFIG *config, const char *option, const char *value) {
 	if (!strcmp(option, "initial_speed")) {
@@ -156,7 +156,6 @@ const CONFIG *get_config(void) {
 		file[6] = *level + '0';
 		if (fopen(file, "r") == NULL) {
 			strcpy(file, DEFAULT_LEVEL);
-			// file = DEFAULT_LEVEL;
 		}
 
 		config = init_config(file);

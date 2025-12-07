@@ -1,4 +1,4 @@
-#include "../headers/albatross_taxi.h"
+#include "albatross_taxi.h"
 
 ALBATROSS_TAXI *init_albatross_taxi(WIN *parent_window) {
 	ALBATROSS_TAXI *taxi = (ALBATROSS_TAXI *) malloc(sizeof(ALBATROSS_TAXI));
@@ -15,8 +15,7 @@ void spawn_taxi(ALBATROSS_TAXI *taxi, BIRD *bird) {
 
 	taxi->dest_y = bird->y;
 	taxi->dest_x = bird->x + 1;
-	// taxi->speed = get_config()->albatross_taxi_speed;
-	taxi->speed = 6;
+	taxi->speed = TAXI_SPEED;
 	taxi->is_bird_inside = false;
 
 	if (taxi->y < taxi->dest_y) {

@@ -43,6 +43,7 @@
 #define MAX_LEVEL_LENGTH 25
 #define MAX_LEVELS 5
 #define DEFAULT_LEVEL "default.conf"
+#define TAXI_SPEED 6
 
 #define HUNTER_DAMAGE_HIGH 5
 #define HUNTER_DAMAGE_MEDIUM 3

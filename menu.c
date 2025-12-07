@@ -1,4 +1,4 @@
-#include "../headers/menu.h"
+#include "menu.h"
 
 void handle_menu_input(WIN *menu_window, char key, STATE *game_state) {
 	key = (char) wgetch(menu_window->window);

@@ -1,4 +1,4 @@
-#include "../headers/occupancy_map.h"
+#include "occupancy_map.h"
 
 OCCUPANT **create_occupancy_map(const WIN *parent_window) {
 	OCCUPANT **occupancy_map = (OCCUPANT **) malloc(parent_window->height * sizeof(OCCUPANT *));

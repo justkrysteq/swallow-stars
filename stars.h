@@ -2,7 +2,6 @@
 
 #include "window.h"
 #include "consts.h"
-// #include "state.h"
 
 typedef struct {
 	float x, y;

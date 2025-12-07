@@ -1,4 +1,4 @@
-#include "../headers/bird.h"
+#include "bird.h"
 
 BIRD *init_bird(WIN *parent_window, int y, int x) {
 	BIRD *bird = (BIRD *) malloc(sizeof(BIRD));

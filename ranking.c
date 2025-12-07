@@ -1,4 +1,4 @@
-#include "../headers/ranking.h"
+#include "ranking.h"
 
 int compare_scores(const void *a, const void *b) {
 	RANKING *playerA = (RANKING *)a;

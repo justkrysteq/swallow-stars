@@ -1,4 +1,4 @@
-#include "../headers/stars.h"
+#include "stars.h"
 
 void draw_star(STAR *star, const bool change_sprite) {
 	if (star->exists) {

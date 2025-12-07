@@ -1,4 +1,4 @@
-#include "../headers/levels.h"
+#include "levels.h"
 
 int *get_selected_level(void) {
 	static int *selected_level = NULL;

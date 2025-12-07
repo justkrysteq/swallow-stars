@@ -1,13 +1,12 @@
-#include "../headers/window.h"
+#include "window.h"
 
 WINDOW *init_screen(void) {
 	WINDOW *win = initscr();
 
-	curs_set(0); // makes cursor invisible
+	curs_set(0);
 	noecho();
 
 	cbreak();
-	// nonl();
 
 	return win;
 }
@@ -36,7 +35,6 @@ WIN *init_window(WINDOW *parent_window, int height, int width, int start_y, int 
 
 void clear_window(WIN *window) {
 	wattron(window->window, COLOR_PAIR(window->color_pair));
-	// werase(window->window);
 	if (window->has_border) {
 		box(window->window, 0, 0);
 	}

@@ -1,11 +1,10 @@
-#include "../headers/utils.h"
+#include "utils.h"
 
 int get_random(int min, int max) {
 	int random_value = 0;
 
 	FILE *dev_urandom = fopen("/dev/urandom", "rb");
 
-	// NOTE: if dev_urandom is not available using srand(time(NULL)) might be neccessary
 	if (dev_urandom == NULL) {
 		printf("Error opening /dev/urandom\n");
 		return -1;

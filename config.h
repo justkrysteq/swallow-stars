@@ -1,4 +1,4 @@
-#pragma once // TODO: change to include guards
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
