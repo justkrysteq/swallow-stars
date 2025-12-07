@@ -101,8 +101,9 @@ CONFIG *init_config(char *file) {
 	load_to_config(config, "level_name", file, false, false, hunter_count);
 
 	if (!config_file) {
-		printf("Error: Could not open config file\n");
-		exit(EXIT_FAILURE); // TODO: CHECK WHAT IT ACTUALLY MEANS
+		printf("Error: Could not open config file:\n");
+		printf("%s\n", file);
+		exit(EXIT_FAILURE);
 	}
 
 	while (fgets(line, sizeof(line), config_file)) {
@@ -142,12 +143,24 @@ CONFIG *init_config(char *file) {
 }
 
 const CONFIG *get_config(void) {
-	char *file = "game.conf";
-
 	static CONFIG *config = NULL;
 
 	if (config == NULL) {
+		char file[20] = "level ?.conf";
+		int *level = get_selected_level();
+
+		if (level == NULL) {
+			level = 0;
+		}
+
+		file[6] = *level + '0';
+		if (fopen(file, "r") == NULL) {
+			strcpy(file, DEFAULT_LEVEL);
+			// file = DEFAULT_LEVEL;
+		}
+
 		config = init_config(file);
+		free(level);
 	}
 
 	return config;

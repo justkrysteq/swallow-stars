@@ -40,6 +40,9 @@
 #define SAFE_ZONE_TIME 5
 #define MAX_PLAYER_NAME_LENGTH 20
 #define MAX_RANKINGS 100
+#define MAX_LEVEL_LENGTH 25
+#define MAX_LEVELS 5
+#define DEFAULT_LEVEL "default.conf"
 
 #define HUNTER_DAMAGE_HIGH 5
 #define HUNTER_DAMAGE_MEDIUM 3

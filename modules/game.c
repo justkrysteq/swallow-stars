@@ -233,7 +233,6 @@ void run_game(void) {
 
 	open_menu(screen, game_state, screen_center_x);
 	get_player_name(screen, game_state, screen_center_x);
-	// TODO: select level
 	open_game(screen, game_state, screen_center_x);
 	show_game_over(screen, game_state, screen_center_x);
 

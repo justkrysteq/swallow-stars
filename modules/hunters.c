@@ -51,8 +51,8 @@ void handle_hunter_spawn(HUNTER *hunter, const BIRD *bird, const float initial_b
 	bool spawns_on_left = (bool) get_random(0, 1);
 
 	hunter->exists = true;
-	hunter->y = get_random(BORDER_SIZE, hunter->parent_window->height - BORDER_SIZE - 1);
-	hunter->x = spawns_on_left ? BORDER_SIZE : hunter->parent_window->width - BORDER_SIZE - 1;
+	hunter->y = get_random(BORDER_SIZE, hunter->parent_window->height - BORDER_SIZE - hunter->height);
+	hunter->x = spawns_on_left ? BORDER_SIZE : hunter->parent_window->width - BORDER_SIZE - hunter->width;
 
 
 	hunter->bounces = get_config()->hunters[hunter_template_id].initial_bounces + ((int) (1 * initial_bounces_escalation));

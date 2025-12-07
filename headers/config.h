@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+
+#include "levels.h"
 #include "utils.h"
 
 // SECTION: CONFIG STRUCTS
@@ -29,8 +31,8 @@ typedef struct {
 	unsigned int hunter_count;
 	float hunter_initial_bounces_escalation, hunter_spawn_rate_escalation;
 	float score_life_multiplier, score_star_multiplier, score_time_multiplier, score_difficulty_multiplier;
-	PLAYER_CONFIG player[200]; // TODO: change to dynamic allocation
-	HUNTER_CONFIG hunters[500]; // TODO: change to dynamic allocation
+	PLAYER_CONFIG player[200];
+	HUNTER_CONFIG hunters[500];
 } CONFIG;
 
 
